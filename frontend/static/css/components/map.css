@@ -1,0 +1,86 @@
+/* Leaflet map container + custom popup/marker */
+.map-wrap {
+  position: relative;
+  width: 100%;
+  height: 480px;
+  border-radius: var(--radius-xl);
+  overflow: hidden;
+  border: 1px solid var(--color-divider);
+  background: var(--color-surface);
+}
+.map-wrap.tall { height: 640px; }
+.map-wrap.short { height: 320px; }
+
+.map-wrap[data-loading="true"]::after {
+  content: "Loading map…";
+  position: absolute;
+  inset: 0;
+  display: grid; place-items: center;
+  color: var(--color-ink-muted);
+  font-size: var(--fs-small);
+  background: var(--color-surface);
+}
+
+/* Override Leaflet popup to look Apple */
+.leaflet-popup-content-wrapper {
+  background: var(--color-bg-elevated) !important;
+  color: var(--color-ink) !important;
+  border-radius: var(--radius-lg) !important;
+  box-shadow: var(--shadow-lg) !important;
+  border: 1px solid var(--color-divider);
+  padding: 4px 6px;
+}
+.leaflet-popup-content {
+  margin: 12px 16px !important;
+  font-family: var(--font-sans);
+  font-size: var(--fs-small);
+  line-height: 1.45;
+  min-width: 180px;
+}
+.leaflet-popup-tip {
+  background: var(--color-bg-elevated) !important;
+  box-shadow: none !important;
+}
+.leaflet-popup-content h4 {
+  font-size: var(--fs-small);
+  font-weight: var(--fw-semibold);
+  margin-bottom: 4px;
+}
+.leaflet-popup-content p { color: var(--color-ink-muted); font-size: var(--fs-caption); }
+
+/* Custom marker */
+.ot-marker {
+  width: 28px; height: 28px;
+  border-radius: 50% 50% 50% 0;
+  background: var(--color-accent);
+  transform: rotate(-45deg);
+  border: 2px solid #fff;
+  box-shadow: var(--shadow-md);
+  position: relative;
+}
+.ot-marker::after {
+  content: "";
+  position: absolute;
+  width: 8px; height: 8px;
+  border-radius: 50%;
+  background: #fff;
+  top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+}
+.ot-marker.attraction { background: #ff6e9c; }
+.ot-marker.hotel { background: var(--color-accent); }
+.ot-marker.food { background: #f5a623; }
+
+/* Map controls override */
+.leaflet-control-zoom a {
+  background: var(--color-bg-elevated) !important;
+  color: var(--color-ink) !important;
+  border-color: var(--color-divider) !important;
+  font-weight: var(--fw-medium);
+}
+.leaflet-bar { box-shadow: var(--shadow-md) !important; border: 1px solid var(--color-divider) !important; }
+.leaflet-control-attribution {
+  background: var(--color-glass) !important;
+  backdrop-filter: blur(8px);
+  font-size: 10px !important;
+}
