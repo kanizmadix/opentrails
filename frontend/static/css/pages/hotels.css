@@ -1,0 +1,83 @@
+/* Hotels search results — split list/map view */
+.hotels-form {
+  background: var(--color-bg-elevated);
+  border: 1px solid var(--color-divider);
+  border-radius: var(--radius-2xl);
+  padding: var(--space-6);
+  box-shadow: var(--shadow-md);
+  display: grid;
+  gap: var(--space-3);
+  grid-template-columns: 1fr;
+}
+@media (min-width: 900px) {
+  .hotels-form { grid-template-columns: 1.6fr 1fr 1fr 0.8fr auto; align-items: end; }
+}
+
+.hotels-layout {
+  display: grid;
+  gap: var(--space-6);
+  grid-template-columns: 1fr;
+  margin-top: var(--space-12);
+}
+@media (min-width: 1100px) { .hotels-layout { grid-template-columns: 1.1fr 1fr; } }
+
+.hotels-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+  max-height: 80vh;
+  overflow-y: auto;
+  padding-right: 8px;
+  scrollbar-width: thin;
+}
+
+.hotel-card {
+  display: grid;
+  grid-template-columns: 140px 1fr;
+  gap: var(--space-4);
+  background: var(--color-bg-elevated);
+  border: 1px solid var(--color-divider);
+  border-radius: var(--radius-xl);
+  overflow: hidden;
+  transition: transform var(--dur-fast), box-shadow var(--dur-fast);
+}
+.hotel-card:hover { transform: translateY(-2px); box-shadow: var(--shadow-md); }
+
+.hotel-card .photo {
+  aspect-ratio: 1;
+  background: linear-gradient(135deg, #c8d4e0, #e8edf3);
+  background-size: cover;
+  background-position: center;
+}
+:root[data-theme="dark"] .hotel-card .photo { background: linear-gradient(135deg, #2a2a2c, #444448); }
+
+.hotel-card .body {
+  padding: var(--space-4) var(--space-4) var(--space-4) 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  justify-content: space-between;
+}
+.hotel-card .title {
+  font-size: var(--fs-title-3);
+  font-weight: var(--fw-semibold);
+  letter-spacing: var(--tracking-tight);
+}
+.hotel-card .meta { color: var(--color-ink-muted); font-size: var(--fs-caption); }
+.hotel-card .price-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+}
+.hotel-card .price {
+  font-size: var(--fs-title-2);
+  font-weight: var(--fw-semibold);
+  letter-spacing: var(--tracking-tight);
+}
+.hotel-card .per-night { font-size: var(--fs-caption); color: var(--color-ink-muted); }
+
+.hotels-map {
+  position: sticky;
+  top: calc(var(--nav-h) + var(--space-4));
+  height: 80vh;
+}
