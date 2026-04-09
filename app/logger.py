@@ -52,6 +52,36 @@ def configure_logging() -> None:
     _configured = True
 
 
-def get_logger(name: str) -> logging.Logger:
+class _KwargAdapter(logging.LoggerAdapter):
+    """Allow ``log.info("event", key=val)`` style structured logging.
+
+    Forwards reserved logging kwargs (``exc_info``, ``stack_info``, ``stacklevel``,
+    ``extra``) untouched and packages everything else into ``extra`` so the
+    JSONFormatter can render the fields.
+    """
+
+    _RESERVED = {"exc_info", "stack_info", "stacklevel", "extra"}
+    _LOGRECORD_ATTRS = {
+        "name", "msg", "args", "levelname", "levelno", "pathname", "filename",
+        "module", "exc_info", "exc_text", "stack_info", "lineno", "funcName",
+        "created", "msecs", "relativeCreated", "thread", "threadName",
+        "processName", "process", "asctime", "message", "taskName",
+    }
+
+    def process(self, msg, kwargs):
+        passthrough = {k: kwargs.pop(k) for k in list(kwargs) if k in self._RESERVED}
+        if kwargs:
+            extra = dict(passthrough.get("extra") or {})
+            for k, v in kwargs.items():
+                # Avoid colliding with LogRecord built-ins.
+                key = f"ctx_{k}" if k in self._LOGRECORD_ATTRS else k
+                extra[key] = v
+            passthrough["extra"] = extra
+            kwargs.clear()
+        kwargs.update(passthrough)
+        return msg, kwargs
+
+
+def get_logger(name: str) -> _KwargAdapter:
     configure_logging()
-    return logging.getLogger(name)
+    return _KwargAdapter(logging.getLogger(name), {})
