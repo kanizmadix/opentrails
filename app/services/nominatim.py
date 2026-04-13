@@ -1,7 +1,7 @@
 """Nominatim (OpenStreetMap) geocoding service. Free, no API key required."""
 from __future__ import annotations
 
-from typing import Any, List, Optional
+from typing import Any
 
 from app.config import settings
 from app.exceptions import NotFoundError
@@ -19,13 +19,13 @@ def _headers() -> dict:
     return {"User-Agent": settings.USER_AGENT, "Accept-Language": "en"}
 
 
-async def geocode(query: str, *, limit: int = 5) -> List[Place]:
+async def geocode(query: str, *, limit: int = 5) -> list[Place]:
     """Resolve a free-text query to candidate Places."""
     if not query or not query.strip():
         return []
     key = f"nominatim:geocode:{query.lower().strip()}:{limit}"
 
-    async def _fetch() -> List[dict]:
+    async def _fetch() -> list[dict]:
         url = f"{settings.NOMINATIM_BASE}/search"
         params = {
             "q": query,
@@ -36,11 +36,11 @@ async def geocode(query: str, *, limit: int = 5) -> List[Place]:
         }
         return await get_json(url, params=params, headers=_headers())
 
-    raw: List[dict] = await cache.get_or_set(key, _fetch, ttl=_CACHE_TTL)
+    raw: list[dict] = await cache.get_or_set(key, _fetch, ttl=_CACHE_TTL)
     return [_to_place(item) for item in raw]
 
 
-async def reverse(lat: float, lon: float) -> Optional[Place]:
+async def reverse(lat: float, lon: float) -> Place | None:
     """Reverse geocode a coordinate to a Place."""
     key = f"nominatim:reverse:{round(lat, 4)}:{round(lon, 4)}"
 

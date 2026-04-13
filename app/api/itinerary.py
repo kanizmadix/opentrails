@@ -1,8 +1,6 @@
 """Itinerary planner API."""
 from __future__ import annotations
 
-from typing import List
-
 from fastapi import APIRouter, HTTPException
 
 from app.ai import itinerary_builder
@@ -38,8 +36,8 @@ async def save(trip_id: int, itinerary: ItineraryResponse) -> dict:
     return {"trip_id": trip_id, "saved_day_ids": ids, "count": len(ids)}
 
 
-@router.get("/trip/{trip_id}", response_model=List[DayPlan])
-async def for_trip(trip_id: int) -> List[DayPlan]:
+@router.get("/trip/{trip_id}", response_model=list[DayPlan])
+async def for_trip(trip_id: int) -> list[DayPlan]:
     trips_storage.get_trip(trip_id)
     plans = itin_storage.list_for_trip(trip_id)
     if not plans:

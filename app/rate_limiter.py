@@ -3,7 +3,6 @@ from __future__ import annotations
 
 import time
 from collections import defaultdict, deque
-from typing import Deque
 
 from fastapi import Request
 from starlette.middleware.base import BaseHTTPMiddleware
@@ -19,7 +18,7 @@ class TokenBucketLimiter(BaseHTTPMiddleware):
         super().__init__(app)
         self.window = 60.0
         self.limit = requests_per_minute or settings.RATE_LIMIT_PER_MINUTE
-        self._hits: dict[str, Deque[float]] = defaultdict(deque)
+        self._hits: dict[str, deque[float]] = defaultdict(deque)
 
     async def dispatch(self, request: Request, call_next):
         ip = request.client.host if request.client else "anon"

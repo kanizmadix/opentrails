@@ -2,7 +2,6 @@
 from __future__ import annotations
 
 from datetime import date, datetime
-from typing import List, Optional
 
 from pydantic import BaseModel, Field
 
@@ -13,7 +12,7 @@ class FlightSearchRequest(BaseModel):
     origin: str = Field(..., description="IATA code or city name")
     destination: str = Field(..., description="IATA code or city name")
     departure_date: date
-    return_date: Optional[date] = None
+    return_date: date | None = None
     adults: int = Field(1, ge=1, le=9)
     children: int = Field(0, ge=0, le=8)
     cabin: str = Field("ECONOMY")
@@ -35,29 +34,29 @@ class FlightSegment(BaseModel):
 
 class FlightPrice(BaseModel):
     total: Money
-    base: Optional[Money] = None
-    taxes: Optional[Money] = None
-    per_adult: Optional[Money] = None
+    base: Money | None = None
+    taxes: Money | None = None
+    per_adult: Money | None = None
 
 
 class FlightOffer(BaseModel):
     id: str
     provider: str
-    segments: List[FlightSegment]
+    segments: list[FlightSegment]
     price: FlightPrice
-    seats_available: Optional[int] = None
-    booking_url: Optional[str] = None
-    refundable: Optional[bool] = None
-    baggage_included: Optional[bool] = None
+    seats_available: int | None = None
+    booking_url: str | None = None
+    refundable: bool | None = None
+    baggage_included: bool | None = None
 
 
 class FlightSearchResponse(BaseModel):
     request: FlightSearchRequest
-    offers: List[FlightOffer]
+    offers: list[FlightOffer]
     provider: str
     fetched_at: datetime
-    cheapest: Optional[FlightOffer] = None
-    fastest: Optional[FlightOffer] = None
+    cheapest: FlightOffer | None = None
+    fastest: FlightOffer | None = None
 
 
 class FareCalendarPoint(BaseModel):

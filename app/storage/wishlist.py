@@ -3,7 +3,6 @@ from __future__ import annotations
 
 import json
 from datetime import datetime
-from typing import List, Optional
 
 from app.db import cursor
 from app.exceptions import NotFoundError
@@ -37,7 +36,7 @@ def add_to_wishlist(item: WishlistItem) -> WishlistItem:
     return _row_to_item(row)
 
 
-def list_wishlist(kind: Optional[str] = None, limit: int = 100) -> List[WishlistItem]:
+def list_wishlist(kind: str | None = None, limit: int = 100) -> list[WishlistItem]:
     with cursor() as cur:
         if kind:
             cur.execute(

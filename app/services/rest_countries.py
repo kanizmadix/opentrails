@@ -1,8 +1,6 @@
 """REST Countries client. Free, no API key."""
 from __future__ import annotations
 
-from typing import List, Optional
-
 from app.config import settings
 from app.exceptions import NotFoundError
 from app.logger import get_logger
@@ -21,7 +19,7 @@ async def country(code_or_name: str) -> CountryProfile:
     """Lookup country by alpha-2/3 or partial name."""
     key = f"restcountries:lookup:{code_or_name.lower()}"
 
-    async def _fetch() -> List[dict]:
+    async def _fetch() -> list[dict]:
         # Try alpha code first when 2-3 chars
         if len(code_or_name) in (2, 3):
             url = f"{settings.REST_COUNTRIES_BASE}/alpha/{code_or_name}"
@@ -40,11 +38,11 @@ async def country(code_or_name: str) -> CountryProfile:
     return _to_profile(raw[0])
 
 
-async def all_countries() -> List[CountryProfile]:
+async def all_countries() -> list[CountryProfile]:
     """List all countries (lightweight projection)."""
     key = "restcountries:all"
 
-    async def _fetch() -> List[dict]:
+    async def _fetch() -> list[dict]:
         url = f"{settings.REST_COUNTRIES_BASE}/all"
         return await get_json(url, params={"fields": _FIELDS})
 
@@ -57,7 +55,7 @@ def _to_profile(raw: dict) -> CountryProfile:
     official = (raw.get("name") or {}).get("official")
     capital_list = raw.get("capital") or []
     idd = raw.get("idd") or {}
-    calling_code: Optional[str] = None
+    calling_code: str | None = None
     if idd.get("root"):
         suffixes = idd.get("suffixes") or [""]
         calling_code = f"{idd['root']}{suffixes[0] if suffixes else ''}"

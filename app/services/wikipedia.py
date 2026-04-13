@@ -1,7 +1,7 @@
 """Wikipedia REST summaries."""
 from __future__ import annotations
 
-from typing import Any, Dict
+from typing import Any
 from urllib.parse import quote
 
 from app.config import settings
@@ -14,7 +14,7 @@ log = get_logger(__name__)
 _CACHE_TTL = 60 * 60 * 24  # 24h
 
 
-async def summary(title: str) -> Dict[str, Any]:
+async def summary(title: str) -> dict[str, Any]:
     """Fetch page summary. Returns dict with title, extract, url, image, lat, lon."""
     if not title:
         return {}

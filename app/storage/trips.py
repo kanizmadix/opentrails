@@ -2,7 +2,6 @@
 from __future__ import annotations
 
 from datetime import date, datetime
-from typing import List, Optional
 
 from app.db import cursor
 from app.exceptions import NotFoundError
@@ -10,10 +9,10 @@ from app.models.trips import TripCreate, TripRecord, TripUpdate
 
 
 def _row_to_record(row) -> TripRecord:
-    def _date(v: Optional[str]) -> Optional[date]:
+    def _date(v: str | None) -> date | None:
         return date.fromisoformat(v) if v else None
 
-    def _dt(v: Optional[str]) -> Optional[datetime]:
+    def _dt(v: str | None) -> datetime | None:
         if not v:
             return None
         try:
@@ -55,7 +54,7 @@ def create_trip(payload: TripCreate) -> TripRecord:
     return _row_to_record(row)
 
 
-def list_trips(limit: int = 50, offset: int = 0) -> List[TripRecord]:
+def list_trips(limit: int = 50, offset: int = 0) -> list[TripRecord]:
     with cursor() as cur:
         cur.execute(
             "SELECT * FROM trips ORDER BY created_at DESC LIMIT ? OFFSET ?",

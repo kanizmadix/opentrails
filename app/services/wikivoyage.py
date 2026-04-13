@@ -1,7 +1,7 @@
 """Wikivoyage destination guide client."""
 from __future__ import annotations
 
-from typing import Any, Dict, List
+from typing import Any
 from urllib.parse import quote
 
 from app.config import settings
@@ -14,13 +14,13 @@ log = get_logger(__name__)
 _CACHE_TTL = 60 * 60 * 12  # 12h
 
 
-async def destination_guide(name: str) -> Dict[str, Any]:
+async def destination_guide(name: str) -> dict[str, Any]:
     """Fetch summary + related pages from Wikivoyage."""
     if not name:
         return {}
     key = f"wikivoyage:guide:{name}"
 
-    async def _fetch() -> Dict[str, Any]:
+    async def _fetch() -> dict[str, Any]:
         summary_url = f"{settings.WIKIVOYAGE_BASE}/page/summary/{quote(name)}"
         related_url = f"{settings.WIKIVOYAGE_BASE}/page/related/{quote(name)}"
         headers = {"User-Agent": settings.USER_AGENT, "Accept": "application/json"}
@@ -38,7 +38,7 @@ async def destination_guide(name: str) -> Dict[str, Any]:
     raw = await cache.get_or_set(key, _fetch, ttl=_CACHE_TTL)
     summary = raw.get("summary") or {}
     related = raw.get("related") or {}
-    related_pages: List[Dict[str, Any]] = []
+    related_pages: list[dict[str, Any]] = []
     for p in (related.get("pages") or [])[:10]:
         related_pages.append({
             "title": p.get("title"),

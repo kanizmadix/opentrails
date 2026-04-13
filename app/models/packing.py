@@ -2,13 +2,12 @@
 from __future__ import annotations
 
 from datetime import date
-from enum import Enum
-from typing import List, Optional
+from enum import StrEnum
 
 from pydantic import BaseModel, Field
 
 
-class PackingCategory(str, Enum):
+class PackingCategory(StrEnum):
     CLOTHING = "clothing"
     ELECTRONICS = "electronics"
     DOCUMENTS = "documents"
@@ -23,11 +22,11 @@ class PackingRequest(BaseModel):
     start_date: date
     end_date: date
     travelers: int = Field(1, ge=1, le=12)
-    activities: List[str] = Field(default_factory=list)
-    season: Optional[str] = None
+    activities: list[str] = Field(default_factory=list)
+    season: str | None = None
     luggage_type: str = Field("checked", description="carryon | checked | backpack")
     has_kids: bool = False
-    notes: Optional[str] = None
+    notes: str | None = None
 
 
 class PackingItem(BaseModel):
@@ -35,13 +34,13 @@ class PackingItem(BaseModel):
     quantity: int = 1
     category: PackingCategory
     essential: bool = False
-    notes: Optional[str] = None
+    notes: str | None = None
 
 
 class PackingList(BaseModel):
     request: PackingRequest
-    items: List[PackingItem]
-    weight_estimate_kg: Optional[float] = None
-    forgotten_warnings: List[str] = Field(default_factory=list)
-    weather_summary: Optional[str] = None
+    items: list[PackingItem]
+    weight_estimate_kg: float | None = None
+    forgotten_warnings: list[str] = Field(default_factory=list)
+    weather_summary: str | None = None
     generated_by: str = "claude-sonnet-4-6"

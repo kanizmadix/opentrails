@@ -3,7 +3,7 @@ from __future__ import annotations
 
 import time
 from datetime import date, datetime
-from typing import Any, Dict, List, Optional
+from typing import Any
 
 import httpx
 
@@ -12,14 +12,16 @@ from app.exceptions import ConfigurationError, UpstreamAPIError
 from app.logger import get_logger
 from app.models.common import GeoPoint, Money
 from app.models.flights import (
-    FlightOffer, FlightPrice, FlightSegment,
+    FlightOffer,
+    FlightPrice,
+    FlightSegment,
 )
 from app.models.hotels import HotelAmenities, HotelOffer
 from app.utils.http import get_json
 
 log = get_logger(__name__)
 
-_token_cache: Dict[str, Any] = {"token": None, "expires_at": 0.0}
+_token_cache: dict[str, Any] = {"token": None, "expires_at": 0.0}
 
 
 def _ensure_keys() -> None:
@@ -48,18 +50,18 @@ async def get_token() -> str:
     return _token_cache["token"]
 
 
-async def _auth_get(path: str, params: Dict[str, Any]) -> Dict[str, Any]:
+async def _auth_get(path: str, params: dict[str, Any]) -> dict[str, Any]:
     token = await get_token()
     url = f"{settings.AMADEUS_BASE}{path}"
     return await get_json(url, params=params, headers={"Authorization": f"Bearer {token}"})
 
 
 async def flight_offers(*, origin: str, destination: str, departure_date: date,
-                        return_date: Optional[date] = None, adults: int = 1,
-                        currency: str = "USD", max_results: int = 20) -> List[FlightOffer]:
+                        return_date: date | None = None, adults: int = 1,
+                        currency: str = "USD", max_results: int = 20) -> list[FlightOffer]:
     """Search Amadeus flight offers."""
     _ensure_keys()
-    params: Dict[str, Any] = {
+    params: dict[str, Any] = {
         "originLocationCode": origin.upper(),
         "destinationLocationCode": destination.upper(),
         "departureDate": departure_date.isoformat(),
@@ -73,8 +75,8 @@ async def flight_offers(*, origin: str, destination: str, departure_date: date,
     return [_to_flight_offer(o) for o in (raw.get("data") or [])]
 
 
-def _to_flight_offer(offer: Dict[str, Any]) -> FlightOffer:
-    segments: List[FlightSegment] = []
+def _to_flight_offer(offer: dict[str, Any]) -> FlightOffer:
+    segments: list[FlightSegment] = []
     for itin in offer.get("itineraries", []):
         for seg in itin.get("segments", []):
             duration_str = seg.get("duration") or "PT0M"
@@ -119,7 +121,7 @@ def _iso8601_duration_to_minutes(s: str) -> int:
 
 
 async def hotel_offers(*, city_code: str, check_in: date, check_out: date,
-                       adults: int = 2) -> List[HotelOffer]:
+                       adults: int = 2) -> list[HotelOffer]:
     """Search Amadeus hotel offers (city-search + offers)."""
     _ensure_keys()
     list_params = {"cityCode": city_code.upper(), "radius": 20, "radiusUnit": "KM"}
@@ -137,14 +139,14 @@ async def hotel_offers(*, city_code: str, check_in: date, check_out: date,
     return [_to_hotel_offer(item) for item in (raw.get("data") or []) if item.get("offers")]
 
 
-def _to_hotel_offer(item: Dict[str, Any]) -> HotelOffer:
+def _to_hotel_offer(item: dict[str, Any]) -> HotelOffer:
     h = item.get("hotel", {})
     offers = item.get("offers", [])
     cheapest = min(offers, key=lambda o: float(o.get("price", {}).get("total", 1e9)))
     price = cheapest.get("price", {})
     total_amount = float(price.get("total", 0.0))
     nights = max((cheapest.get("checkOutDate", "") and cheapest.get("checkInDate", "") and 1) or 1, 1)
-    geo: Optional[GeoPoint] = None
+    geo: GeoPoint | None = None
     if h.get("latitude") is not None and h.get("longitude") is not None:
         geo = GeoPoint(lat=float(h["latitude"]), lon=float(h["longitude"]))
     return HotelOffer(

@@ -2,59 +2,59 @@
 from __future__ import annotations
 
 from datetime import date, datetime
-from typing import Any, Dict, Optional
+from typing import Any
 
 from pydantic import BaseModel, Field
 
 
 class TripCreate(BaseModel):
     name: str = Field(..., min_length=1, max_length=200)
-    origin: Optional[str] = None
+    origin: str | None = None
     destination: str
-    start_date: Optional[date] = None
-    end_date: Optional[date] = None
+    start_date: date | None = None
+    end_date: date | None = None
     travelers: int = Field(1, ge=1, le=20)
-    budget_usd: Optional[float] = Field(None, ge=0)
-    notes: Optional[str] = None
+    budget_usd: float | None = Field(None, ge=0)
+    notes: str | None = None
 
 
 class TripUpdate(BaseModel):
-    name: Optional[str] = None
-    origin: Optional[str] = None
-    destination: Optional[str] = None
-    start_date: Optional[date] = None
-    end_date: Optional[date] = None
-    travelers: Optional[int] = Field(None, ge=1, le=20)
-    budget_usd: Optional[float] = Field(None, ge=0)
-    notes: Optional[str] = None
+    name: str | None = None
+    origin: str | None = None
+    destination: str | None = None
+    start_date: date | None = None
+    end_date: date | None = None
+    travelers: int | None = Field(None, ge=1, le=20)
+    budget_usd: float | None = Field(None, ge=0)
+    notes: str | None = None
 
 
 class TripRecord(BaseModel):
     id: int
     name: str
-    origin: Optional[str] = None
+    origin: str | None = None
     destination: str
-    start_date: Optional[date] = None
-    end_date: Optional[date] = None
+    start_date: date | None = None
+    end_date: date | None = None
     travelers: int = 1
-    budget_usd: Optional[float] = None
-    notes: Optional[str] = None
-    created_at: Optional[datetime] = None
-    updated_at: Optional[datetime] = None
+    budget_usd: float | None = None
+    notes: str | None = None
+    created_at: datetime | None = None
+    updated_at: datetime | None = None
 
 
 class WishlistItem(BaseModel):
-    id: Optional[int] = None
+    id: int | None = None
     kind: str = Field(..., description="destination | flight | hotel | attraction")
-    payload: Dict[str, Any]
-    notes: Optional[str] = None
-    created_at: Optional[datetime] = None
+    payload: dict[str, Any]
+    notes: str | None = None
+    created_at: datetime | None = None
 
 
 class SearchHistoryItem(BaseModel):
-    id: Optional[int] = None
+    id: int | None = None
     domain: str
-    query: Dict[str, Any]
-    result_count: Optional[int] = None
-    duration_ms: Optional[int] = None
-    created_at: Optional[datetime] = None
+    query: dict[str, Any]
+    result_count: int | None = None
+    duration_ms: int | None = None
+    created_at: datetime | None = None

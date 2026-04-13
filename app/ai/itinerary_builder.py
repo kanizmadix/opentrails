@@ -2,7 +2,6 @@
 from __future__ import annotations
 
 from datetime import date, timedelta
-from typing import List
 
 from app.ai.claude_client import claude_call
 from app.logger import get_logger
@@ -10,7 +9,11 @@ from app.models.attractions import Attraction
 from app.models.common import Money
 from app.models.destinations import WeatherSummary
 from app.models.itinerary import (
-    BudgetBreakdown, DayPlan, ItineraryActivity, ItineraryRequest, ItineraryResponse,
+    BudgetBreakdown,
+    DayPlan,
+    ItineraryActivity,
+    ItineraryRequest,
+    ItineraryResponse,
 )
 
 log = get_logger(__name__)
@@ -29,7 +32,7 @@ You ALWAYS respond with valid JSON exactly matching the requested schema. No pro
 """
 
 
-def _format_attractions(attractions: List[Attraction]) -> str:
+def _format_attractions(attractions: list[Attraction]) -> str:
     if not attractions:
         return "No specific attractions provided — use your knowledge of the destination."
     lines = [
@@ -45,7 +48,7 @@ def _format_weather(weather: WeatherSummary) -> str:
     return weather.summary
 
 
-def _build_user_prompt(req: ItineraryRequest, attractions: List[Attraction],
+def _build_user_prompt(req: ItineraryRequest, attractions: list[Attraction],
                        weather: WeatherSummary) -> str:
     duration = (req.end_date - req.start_date).days + 1
     return f"""Plan a {duration}-day trip to {req.destination}.
@@ -99,7 +102,7 @@ Respond with this JSON shape:
 """
 
 
-def build_itinerary(req: ItineraryRequest, attractions: List[Attraction],
+def build_itinerary(req: ItineraryRequest, attractions: list[Attraction],
                     weather: WeatherSummary) -> ItineraryResponse:
     user_prompt = _build_user_prompt(req, attractions, weather)
     data = claude_call(system=SYSTEM_PROMPT, user=user_prompt,
@@ -127,7 +130,7 @@ def _coerce_day(d: dict, start_date: date, idx: int) -> DayPlan:
         day_date = date.fromisoformat(raw_date) if raw_date else start_date + timedelta(days=idx)
     except (TypeError, ValueError):
         day_date = start_date + timedelta(days=idx)
-    activities: List[ItineraryActivity] = []
+    activities: list[ItineraryActivity] = []
     for a in d.get("activities") or []:
         try:
             activities.append(ItineraryActivity.model_validate(a))
