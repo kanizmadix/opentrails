@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 220 32" role="img" aria-label="OpenTrails wordmark">
+  <g fill="currentColor">
+    <path d="M3 24 L13 8 L19 17 L24 11 L31 24 Z" opacity="0.95"/>
+    <circle cx="22" cy="9" r="2.4" opacity="0.9"/>
+  </g>
+  <text x="40" y="22" font-family="-apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Helvetica Neue', sans-serif" font-size="18" font-weight="600" fill="currentColor" letter-spacing="-0.4">opentrails</text>
+</svg>
