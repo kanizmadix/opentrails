@@ -1,0 +1,51 @@
+<footer class="footer">
+  <div class="container">
+    <div class="footer-cols">
+      <div class="footer-brand">
+        <span class="wordmark">opentrails</span>
+        <span class="tagline">An open-API travel platform for flights, hotels, attractions, and AI itineraries — built entirely on open data.</span>
+      </div>
+      <div>
+        <div class="footer-col-title">Explore</div>
+        <ul class="footer-list">
+          <li><a href="/flights">Flights</a></li>
+          <li><a href="/hotels">Hotels</a></li>
+          <li><a href="/attractions">Attractions</a></li>
+          <li><a href="/destination">Destinations</a></li>
+          <li><a href="/itinerary">Itinerary</a></li>
+        </ul>
+      </div>
+      <div>
+        <div class="footer-col-title">Open data</div>
+        <ul class="footer-list">
+          <li><a href="https://www.openstreetmap.org/" target="_blank" rel="noopener">OpenStreetMap</a></li>
+          <li><a href="https://opentripmap.io/" target="_blank" rel="noopener">OpenTripMap</a></li>
+          <li><a href="https://open-meteo.com/" target="_blank" rel="noopener">Open-Meteo</a></li>
+          <li><a href="https://restcountries.com/" target="_blank" rel="noopener">REST Countries</a></li>
+          <li><a href="https://www.frankfurter.app/" target="_blank" rel="noopener">Frankfurter</a></li>
+          <li><a href="https://www.wikivoyage.org/" target="_blank" rel="noopener">Wikivoyage</a></li>
+        </ul>
+      </div>
+      <div>
+        <div class="footer-col-title">About</div>
+        <ul class="footer-list">
+          <li><a href="/about">Mission</a></li>
+          <li><a href="/about#manifesto">Open data manifesto</a></li>
+          <li><a href="https://github.com/kanizmadix/opentrails" target="_blank" rel="noopener">GitHub</a></li>
+          <li><a href="/about#privacy">Privacy</a></li>
+          <li><a href="/about#terms">Terms</a></li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="footer-attribution">
+      Map data © OpenStreetMap contributors, available under the Open Database License. Weather © Open-Meteo. Currency rates © European Central Bank via Frankfurter. Country data © REST Countries. Travel guides © Wikivoyage contributors. We respect every open-data license and link source data wherever it appears.
+    </div>
+
+    <div class="footer-bottom">
+      <span>© <span id="footer-year"></span> opentrails. Built on open data.</span>
+      <span>Crafted with care · v0.1</span>
+    </div>
+  </div>
+</footer>
+<script>document.getElementById("footer-year").textContent = new Date().getFullYear();</script>
