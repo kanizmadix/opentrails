@@ -1,0 +1,129 @@
+{% extends "base.html" %}
+{% block title %}Attractions · OpenTrails{% endblock %}
+{% block body_class %}page-attractions{% endblock %}
+{% block head_css %}
+  <link rel="stylesheet" href="/static/css/pages/hotels.css">
+  <link rel="stylesheet" href="/static/css/pages/destination.css">
+{% endblock %}
+
+{% block content %}
+<section class="section-tight">
+  <div class="container">
+    <div style="margin-bottom: 32px;">
+      <div class="t-eyebrow">Attractions</div>
+      <h1 class="t-headline">Sights worth a detour.</h1>
+      <p class="muted" style="margin-top: 8px;">Powered by OpenTripMap and OpenStreetMap.</p>
+    </div>
+
+    <form id="attractions-form" class="hotels-form" autocomplete="off" style="grid-template-columns: 1.6fr 1fr auto;">
+      <div class="field"><label class="field-label">City or place</label>
+        <div class="search-wrap"><input class="input" type="text" name="q" placeholder="Search a city" data-search-bar required></div>
+      </div>
+      <div class="field"><label class="field-label">Radius</label>
+        <select class="select" name="radius">
+          <option value="2000">2 km</option><option value="5000" selected>5 km</option><option value="10000">10 km</option><option value="25000">25 km</option>
+        </select>
+      </div>
+      <button class="btn btn-primary btn-lg" type="submit">Search</button>
+    </form>
+
+    <div class="chips-row" style="margin-top: 16px;" id="categories-row">
+      <button type="button" class="chip" data-category="all" aria-pressed="true">All</button>
+      <button type="button" class="chip" data-category="historic" aria-pressed="false">History</button>
+      <button type="button" class="chip" data-category="natural" aria-pressed="false">Nature</button>
+      <button type="button" class="chip" data-category="museums" aria-pressed="false">Museums</button>
+      <button type="button" class="chip" data-category="foods" aria-pressed="false">Food</button>
+      <button type="button" class="chip" data-category="amusements" aria-pressed="false">Nightlife</button>
+    </div>
+
+    <div class="hotels-layout" style="margin-top: 32px;">
+      <div id="attractions-list" class="hotels-list">
+        <div class="search-empty"><div class="glyph">★</div><p>Search a city to load attractions.</p></div>
+      </div>
+      <div class="hotels-map">
+        <div id="attractions-map" class="map-wrap tall" data-loading="true"></div>
+      </div>
+    </div>
+  </div>
+</section>
+{% endblock %}
+
+{% block body_scripts %}
+<script type="module">
+  import { createMap, addMarker, fitBounds } from "/static/js/leaflet-map.js";
+
+  const form = document.getElementById("attractions-form");
+  const list = document.getElementById("attractions-list");
+  const mapEl = document.getElementById("attractions-map");
+  const categoriesRow = document.getElementById("categories-row");
+  let map, currentCategory = "all", currentItems = [];
+
+  async function ensureMap() {
+    if (map) return map;
+    map = await createMap("attractions-map", { center: [48.8566, 2.3522], zoom: 4 });
+    return map;
+  }
+
+  function gradient(seed) {
+    let h = 0; for (let i = 0; i < seed.length; i++) h = (h * 31 + seed.charCodeAt(i)) >>> 0;
+    return `linear-gradient(135deg, hsl(${h%360},45%,72%), hsl(${(h+60)%360},45%,82%))`;
+  }
+
+  function render(items) {
+    if (!items.length) {
+      list.innerHTML = `<div class="search-empty"><div class="glyph">○</div><p>No attractions in this area.</p></div>`;
+      return;
+    }
+    list.innerHTML = items.slice(0, 60).map((a) => `
+      <a class="hotel-card" href="${a.url || '#'}" target="_blank" rel="noopener">
+        <div class="photo" style="background:${gradient(a.name||'a')};${a.image ? `background-image:url('${a.image}');background-size:cover;background-position:center;` : ''}"></div>
+        <div class="body">
+          <div>
+            <div class="title">${a.name || 'Untitled'}</div>
+            <div class="meta">${(a.kinds || a.category || '').replace(/_/g,' ')}</div>
+          </div>
+          <div class="t-caption muted">${a.distance ? Math.round(a.distance) + ' m away' : ''}</div>
+        </div>
+      </a>
+    `).join("");
+  }
+
+  async function plot(items) {
+    await ensureMap();
+    map.eachLayer((l) => { if (l._latlng) map.removeLayer(l); });
+    const points = [];
+    for (const a of items) {
+      if (a.lat && a.lon) {
+        await addMarker(map, a.lat, a.lon, `<h4>${a.name}</h4><p>${(a.kinds||'').replace(/_/g,' ')}</p>`, "attraction");
+        points.push({ lat: a.lat, lon: a.lon });
+      }
+    }
+    if (points.length) fitBounds(map, points);
+  }
+
+  function applyFilter() {
+    const items = currentCategory === "all" ? currentItems : currentItems.filter((a) => (a.kinds || a.category || '').includes(currentCategory));
+    render(items); plot(items);
+  }
+
+  categoriesRow.addEventListener("click", (e) => {
+    const c = e.target.closest(".chip"); if (!c) return;
+    categoriesRow.querySelectorAll(".chip").forEach((x) => x.setAttribute("aria-pressed", "false"));
+    c.setAttribute("aria-pressed", "true");
+    currentCategory = c.dataset.category;
+    applyFilter();
+  });
+
+  form.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    const fd = new FormData(form);
+    const params = { q: fd.get("q"), radius: fd.get("radius") };
+    if (window.skeleton) window.skeleton.inject(list, "card", 4);
+    const data = await window.tryApi(() => window.api.get("/attractions/search", { params }));
+    currentItems = (data && (data.results || data.items || data)) || [];
+    applyFilter();
+  });
+
+  ensureMap();
+</script>
+{% endblock %}
