@@ -1,0 +1,63 @@
+{% extends "base.html" %}
+{% block title %}Itinerary · OpenTrails{% endblock %}
+{% block body_class %}page-itinerary{% endblock %}
+{% block head_css %}<link rel="stylesheet" href="/static/css/pages/itinerary.css">{% endblock %}
+
+{% block content %}
+<section class="section-tight">
+  <div class="container-narrow">
+    <div class="text-center" style="margin-bottom: 40px;">
+      <div class="t-eyebrow">AI itinerary</div>
+      <h1 class="t-headline t-balance">Plan a trip in seconds.</h1>
+      <p class="t-body-lg muted t-balance" style="margin-top: 8px;">Tell us where, when, and what you love. We do the rest.</p>
+    </div>
+
+    <form id="itin-form" class="itin-form" autocomplete="off">
+      <div class="form-row cols-2">
+        <div class="field"><label class="field-label">Destination</label>
+          <div class="search-wrap"><input class="input" type="text" name="destination" placeholder="e.g. Lisbon" data-search-bar required></div>
+        </div>
+        <div class="field"><label class="field-label">Travelers</label>
+          <select class="select" name="travelers"><option>1</option><option selected>2</option><option>3</option><option>4</option><option>5</option></select>
+        </div>
+      </div>
+      <div class="form-row cols-3">
+        <div class="field"><label class="field-label">Start date</label><input class="input" type="date" name="start_date" data-range-start="itin" required></div>
+        <div class="field"><label class="field-label">End date</label><input class="input" type="date" name="end_date" data-range-end="itin" required></div>
+        <div class="field"><label class="field-label">Budget (per person)</label><input class="input" type="number" name="budget" min="0" step="50" placeholder="1500"></div>
+      </div>
+
+      <div class="field">
+        <label class="field-label">Vibe (pick a few)</label>
+        <div class="vibe-row">
+          <button type="button" class="chip" aria-pressed="true">Relaxed<input type="hidden" name="vibe" value="relaxed"></button>
+          <button type="button" class="chip" aria-pressed="false">Active<input type="hidden" name="vibe" value="active" disabled></button>
+          <button type="button" class="chip" aria-pressed="false">Foodie<input type="hidden" name="vibe" value="foodie" disabled></button>
+          <button type="button" class="chip" aria-pressed="false">Cultural<input type="hidden" name="vibe" value="cultural" disabled></button>
+          <button type="button" class="chip" aria-pressed="false">Family<input type="hidden" name="vibe" value="family" disabled></button>
+          <button type="button" class="chip" aria-pressed="false">Adventure<input type="hidden" name="vibe" value="adventure" disabled></button>
+          <button type="button" class="chip" aria-pressed="false">Nightlife<input type="hidden" name="vibe" value="nightlife" disabled></button>
+        </div>
+      </div>
+
+      <div class="row-end">
+        <select class="select" name="currency" style="max-width: 120px;">
+          <option>USD</option><option>EUR</option><option>GBP</option><option>JPY</option><option>INR</option>
+        </select>
+        <button class="btn btn-primary btn-lg" type="submit">Generate itinerary</button>
+      </div>
+    </form>
+  </div>
+</section>
+
+<section class="section-tight">
+  <div class="container">
+    <div class="itin-results">
+      <div id="itin-results"></div>
+      <aside id="itin-summary"></aside>
+    </div>
+  </div>
+</section>
+{% endblock %}
+
+{% block body_scripts %}<script src="/static/js/pages/itinerary.js"></script>{% endblock %}
