@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+{% block title %}Your trips · OpenTrails{% endblock %}
+{% block body_class %}page-trip{% endblock %}
+{% block head_css %}<link rel="stylesheet" href="/static/css/pages/trip.css">{% endblock %}
+
+{% block content %}
+<section class="section-tight">
+  <div class="container">
+    <div class="row-between" style="margin-bottom: 32px;">
+      <div>
+        <div class="t-eyebrow">Trips</div>
+        <h1 class="t-headline">Your saved adventures.</h1>
+      </div>
+      <a class="btn btn-primary" href="/itinerary">+ New trip</a>
+    </div>
+
+    <div id="trips-grid" class="trips-grid"></div>
+  </div>
+</section>
+
+<section class="section-tight">
+  <div class="container">
+    <div class="row-between" style="margin-bottom: 24px;">
+      <div>
+        <div class="t-eyebrow">Wishlist</div>
+        <h2 class="t-title-1">Saved for later.</h2>
+      </div>
+      <a class="btn-link" href="/wishlist">View all</a>
+    </div>
+    <div id="wishlist-grid" class="wishlist-grid"></div>
+  </div>
+</section>
+{% endblock %}
+
+{% block body_scripts %}<script src="/static/js/pages/trip.js"></script>{% endblock %}
