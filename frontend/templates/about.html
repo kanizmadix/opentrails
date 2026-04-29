@@ -1,0 +1,79 @@
+{% extends "base.html" %}
+{% block title %}About · OpenTrails{% endblock %}
+{% block body_class %}page-about{% endblock %}
+{% block head_css %}<link rel="stylesheet" href="/static/css/pages/about.css">{% endblock %}
+
+{% block content %}
+<section class="about-hero">
+  <div class="container-narrow">
+    <h1 class="t-balance">Travel built like the web should be.</h1>
+    <p class="t-balance">Open standards. Open data. Open source. No tracking, no walled gardens, no surprises.</p>
+  </div>
+</section>
+
+<section class="section-tight" id="manifesto">
+  <div class="container-narrow">
+    <div class="manifesto reveal">
+      <div class="t-eyebrow">Open data manifesto</div>
+      <h2>Why open?</h2>
+      <p>The travel industry runs on closed APIs and rented data. We think you deserve better — a stack you can audit, fork, host yourself, and trust. OpenTrails is built on that principle.</p>
+      <ul>
+        <li>Every data point is sourced from a public, citable API.</li>
+        <li>Every map tile comes from OpenStreetMap, under the ODbL.</li>
+        <li>Every itinerary discloses its inputs, costs, and reasoning.</li>
+        <li>Every page is keyboard accessible and respects reduced-motion preferences.</li>
+        <li>Code is MIT-licensed and reproducible.</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section class="section-tight">
+  <div class="container">
+    <div style="text-align: center; margin-bottom: 32px;">
+      <div class="t-eyebrow">Sources</div>
+      <h2 class="t-title-1">Built on these open APIs.</h2>
+    </div>
+    <div class="sources-grid">
+      <div class="source-card"><span class="domain">Maps & geocoding</span><span class="src">OpenStreetMap · Nominatim · Leaflet</span><a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">openstreetmap.org</a></div>
+      <div class="source-card"><span class="domain">Attractions</span><span class="src">OpenTripMap · OSM Overpass</span><a href="https://opentripmap.io/" target="_blank" rel="noopener">opentripmap.io</a></div>
+      <div class="source-card"><span class="domain">Weather</span><span class="src">Open-Meteo</span><a href="https://open-meteo.com/" target="_blank" rel="noopener">open-meteo.com</a></div>
+      <div class="source-card"><span class="domain">Country & visa</span><span class="src">REST Countries</span><a href="https://restcountries.com/" target="_blank" rel="noopener">restcountries.com</a></div>
+      <div class="source-card"><span class="domain">Currency</span><span class="src">Frankfurter (ECB)</span><a href="https://www.frankfurter.app/" target="_blank" rel="noopener">frankfurter.app</a></div>
+      <div class="source-card"><span class="domain">Travel guides</span><span class="src">Wikipedia · Wikivoyage</span><a href="https://www.wikivoyage.org/" target="_blank" rel="noopener">wikivoyage.org</a></div>
+      <div class="source-card"><span class="domain">Flights</span><span class="src">Amadeus Self-Service · Kiwi Tequila (free tiers)</span><a href="https://developers.amadeus.com/" target="_blank" rel="noopener">developers.amadeus.com</a></div>
+      <div class="source-card"><span class="domain">AI</span><span class="src">Anthropic Claude (claude-sonnet-4-6)</span><a href="https://www.anthropic.com/" target="_blank" rel="noopener">anthropic.com</a></div>
+    </div>
+  </div>
+</section>
+
+<section class="section-tight">
+  <div class="container-narrow">
+    <div style="text-align: center; margin-bottom: 24px;">
+      <div class="t-eyebrow">Tech stack</div>
+      <h2 class="t-title-1">Boring tools, well used.</h2>
+    </div>
+    <div class="tech-stack">
+      <span class="badge">FastAPI</span>
+      <span class="badge">Python 3.12</span>
+      <span class="badge">Pydantic</span>
+      <span class="badge">SQLite</span>
+      <span class="badge">Jinja2</span>
+      <span class="badge">Vanilla JS</span>
+      <span class="badge">Leaflet</span>
+      <span class="badge">OpenStreetMap</span>
+      <span class="badge">Anthropic Claude</span>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="privacy">
+  <div class="container-narrow">
+    <div class="manifesto">
+      <div class="t-eyebrow">Privacy</div>
+      <h2>What we don't do.</h2>
+      <p>We don't track you across the web. We don't load third-party ads or analytics. We don't sell, share, or rent your data. The only requests OpenTrails makes are the open APIs the page tells you about — and we link to every one.</p>
+    </div>
+  </div>
+</section>
+{% endblock %}
