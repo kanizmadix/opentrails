@@ -169,3 +169,84 @@ make dev   # uvicorn with --reload
 Behind a reverse proxy (Nginx / Caddy), terminate TLS at the proxy and forward
 `/` and `/api/*` to `127.0.0.1:8000`.
 
+## Frontend
+
+OpenTrails ships with an Apple-aesthetic frontend served from `frontend/`. It is
+**vanilla** — no build step, no framework — designed to be readable, accessible,
+and theme-aware on first paint.
+
+### Design system
+
+Tokens live in `frontend/static/css/tokens.css` and define:
+
+- **Color** — light (`#fbfbfd` / `#1d1d1f`) and dark (`#000` / `#f5f5f7`) palettes
+  with shared Apple-blue accent (`#0071e3` light, `#2997ff` dark).
+- **Typography** — SF Pro fallback chain, fluid `clamp()` sizes from 13px caption
+  to 96px display, tight letter-spacing for large heads.
+- **Spacing** — 4px-base, 8px grid (`--space-1` through `--space-44` / 180px).
+- **Radii** — 6 / 10 / 14 / 18 / 22 / 28 px, plus pill `980px`.
+- **Shadows / motion** — soft elevation shadows; `cubic-bezier(0.16, 1, 0.3, 1)`
+  ease-out for the Apple "snap".
+
+### File map
+
+```
+frontend/
+├── templates/                  # Jinja2 — extend base.html
+│   ├── base.html               # head, theme bootstrap, asset links
+│   ├── home.html               # hero · discover · spotlight · plan · CTA
+│   ├── search.html             # global search w/ tabs
+│   ├── flights.html            # flight search + filters + fare calendar
+│   ├── hotels.html             # split list/map view
+│   ├── attractions.html        # category chips + map + cards
+│   ├── destination.html        # hero · intel · weather · currency · sights
+│   ├── itinerary.html          # AI itinerary form + day timeline
+│   ├── trip.html               # saved trips grid
+│   ├── wishlist.html
+│   ├── about.html              # mission + open-data manifesto + sources
+│   └── components/             # nav, footer, skeleton macros
+└── static/
+    ├── css/
+    │   ├── tokens.css          # design tokens (light + dark)
+    │   ├── reset.css base.css typography.css layout.css animations.css
+    │   ├── components/         # buttons, cards, nav, forms, badges,
+    │   │                       # dialog, footer, map, timeline
+    │   └── pages/              # home, search, flights, hotels,
+    │                           # destination, itinerary, trip, about
+    ├── js/
+    │   ├── api.js              # fetch helper (window.api / window.tryApi)
+    │   ├── theme.js            # light/dark/system + persistence
+    │   ├── nav.js reveal.js leaflet-map.js
+    │   ├── components/         # toast, dialog, datepicker, search-bar,
+    │   │                       # carousel, skeleton
+    │   └── pages/              # one module per template
+    └── img/                    # logo.svg, favicon.svg, og-image.svg
+```
+
+### Theming
+
+Theme is bootstrapped inline in `<head>` (no FOUC) and stored in
+`localStorage["opentrails:theme"]` as `"light"` | `"dark"` | unset (system).
+Every `data-theme-toggle` button cycles light ↔ dark; clearing storage falls
+back to the OS `prefers-color-scheme`. Theme changes dispatch a `themechange`
+event for components that need to re-render.
+
+### Accessibility
+
+- Semantic landmarks on every page (`<nav>`, `<main>`, `<footer>`).
+- Visible focus rings on all interactive elements (`--shadow-focus`).
+- All maps and decorative SVGs have `role="img"` / `aria-label` / `aria-hidden`.
+- Forms use proper `<label>` elements and required ARIA states.
+- Animations respect `prefers-reduced-motion`.
+- All buttons are reachable via keyboard; the carousel responds to ←/→.
+
+### Maps
+
+`frontend/static/js/leaflet-map.js` lazy-loads Leaflet 1.9.4 from unpkg the
+first time a map is needed and configures **OpenStreetMap** tiles only — no
+Mapbox, no Google. Custom popup and marker styles match the design system.
+
+### Connecting the API
+
+Every page module calls `window.api` against `/api/*`. Endpoints that aren't
+implemented yet show empty states with skeletons, so the UI never breaks.
