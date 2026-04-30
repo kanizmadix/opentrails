@@ -1,0 +1,25 @@
+{# Reusable skeleton snippets — include with {% include 'components/skeleton.html' %} #}
+{% macro line(width="60%") -%}
+  <div class="skeleton" style="height:14px;width:{{ width }};margin:6px 0;border-radius:7px;"></div>
+{%- endmacro %}
+
+{% macro block(height="120px") -%}
+  <div class="skeleton" style="height:{{ height }};width:100%;border-radius:14px;"></div>
+{%- endmacro %}
+
+{% macro card(media=true) -%}
+  <div class="card" style="padding:0;overflow:hidden;">
+    {% if media %}<div class="skeleton" style="height:180px;width:100%;border-radius:0;"></div>{% endif %}
+    <div style="padding:20px 24px 28px;">
+      {{ line("70%") }}
+      {{ line("45%") }}
+      {{ line("85%") }}
+    </div>
+  </div>
+{%- endmacro %}
+
+{% macro grid(count=3, media=true) -%}
+  <div class="cards-grid">
+    {% for _ in range(count) %}{{ card(media) }}{% endfor %}
+  </div>
+{%- endmacro %}
