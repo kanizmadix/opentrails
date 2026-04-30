@@ -1,0 +1,80 @@
+{% extends "base.html" %}
+{% block title %}Destination · OpenTrails{% endblock %}
+{% block body_class %}page-destination{% endblock %}
+{% block head_css %}<link rel="stylesheet" href="/static/css/pages/destination.css">{% endblock %}
+
+{% block content %}
+<header id="dest-hero" class="dest-hero">
+  <div class="dest-hero-body">
+    <div class="t-eyebrow" style="color: rgba(255,255,255,0.85);">Destination</div>
+    <h1 id="dest-title">Loading…</h1>
+    <p id="dest-subtitle">Open intel from public APIs is loading.</p>
+    <div class="meta-row">
+      <a id="build-itinerary-btn" class="btn btn-primary btn-lg" href="#">Build my itinerary</a>
+      <a class="btn btn-ghost btn-lg" style="color:white; border-color:rgba(255,255,255,0.4);" href="/attractions">See attractions</a>
+    </div>
+  </div>
+</header>
+
+<section class="section-tight">
+  <div class="container">
+    <div style="margin-bottom: 24px;">
+      <div class="t-eyebrow">Travel intel</div>
+      <h2 class="t-title-1">Everything you need to know.</h2>
+    </div>
+    <div id="intel-grid" class="intel-grid"></div>
+  </div>
+</section>
+
+<section class="section-tight">
+  <div class="container">
+    <div class="dest-cols">
+      <div class="stack stack-lg">
+        <div>
+          <div class="t-eyebrow">Weather</div>
+          <h3 class="t-title-1" style="margin-bottom: 16px;">7-day forecast.</h3>
+          <div id="weather-card" class="weather-card"><p class="muted">Loading…</p></div>
+        </div>
+        <div>
+          <div class="t-eyebrow">Currency</div>
+          <h3 class="t-title-1" style="margin-bottom: 16px;">Convert on the fly.</h3>
+          <div id="currency-card" class="currency-card"></div>
+        </div>
+      </div>
+
+      <div class="stack stack-lg">
+        <div>
+          <div class="t-eyebrow">Packing</div>
+          <h3 class="t-title-1" style="margin-bottom: 16px;">Don't forget.</h3>
+          <div id="packing-card" class="packing-card"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section-tight">
+  <div class="container">
+    <div class="row-between" style="margin-bottom: 24px;">
+      <div>
+        <div class="t-eyebrow">Top sights</div>
+        <h2 class="t-title-1">Don't miss these.</h2>
+      </div>
+      <a class="btn-link hide-mobile" href="/attractions">Browse all</a>
+    </div>
+    <div id="attractions-carousel" class="spotlight" data-carousel role="region" aria-label="Top attractions"></div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container">
+    <div class="card-feature dark text-center">
+      <h2 class="t-headline" style="margin-bottom: 12px;">Ready to go?</h2>
+      <p class="t-body-lg" style="color: rgba(255,255,255,0.75); margin-bottom: 24px;">Generate a custom day-by-day plan in seconds.</p>
+      <a id="build-itinerary-btn" class="btn btn-primary btn-lg" href="/itinerary">Plan this trip</a>
+    </div>
+  </div>
+</section>
+{% endblock %}
+
+{% block body_scripts %}<script src="/static/js/pages/destination.js"></script>{% endblock %}
