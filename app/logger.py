@@ -1,0 +1,57 @@
+"""Structured JSON logging for OpenTrails."""
+from __future__ import annotations
+
+import json
+import logging
+import sys
+from datetime import datetime, timezone
+from typing import Any
+
+from app.config import settings
+
+
+class JSONFormatter(logging.Formatter):
+    def format(self, record: logging.LogRecord) -> str:
+        payload: dict[str, Any] = {
+            "ts": datetime.now(timezone.utc).isoformat(),
+            "level": record.levelname,
+            "logger": record.name,
+            "msg": record.getMessage(),
+        }
+        if record.exc_info:
+            payload["exc"] = self.formatException(record.exc_info)
+        for key, val in record.__dict__.items():
+            if key in {
+                "name", "msg", "args", "levelname", "levelno", "pathname", "filename",
+                "module", "exc_info", "exc_text", "stack_info", "lineno", "funcName",
+                "created", "msecs", "relativeCreated", "thread", "threadName",
+                "processName", "process", "asctime", "message", "taskName",
+            }:
+                continue
+            try:
+                json.dumps(val)
+                payload[key] = val
+            except (TypeError, ValueError):
+                payload[key] = repr(val)
+        return json.dumps(payload, default=str)
+
+
+_configured = False
+
+
+def configure_logging() -> None:
+    global _configured
+    if _configured:
+        return
+    handler = logging.StreamHandler(sys.stdout)
+    handler.setFormatter(JSONFormatter())
+    root = logging.getLogger()
+    root.handlers.clear()
+    root.addHandler(handler)
+    root.setLevel(getattr(logging, settings.LOG_LEVEL.upper(), logging.INFO))
+    _configured = True
+
+
+def get_logger(name: str) -> logging.Logger:
+    configure_logging()
+    return logging.getLogger(name)
