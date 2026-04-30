@@ -1,0 +1,3 @@
+frontend/templates/**/*.html linguist-vendored=true
+frontend/static/**/*.css linguist-vendored=true
+frontend/static/**/*.js linguist-vendored=true
