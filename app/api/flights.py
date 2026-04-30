@@ -2,14 +2,15 @@
 from __future__ import annotations
 
 from datetime import date, timedelta
-from typing import List
 
 from fastapi import APIRouter, Query
 
-from app.models.flights import (
-    FareCalendarPoint, FlightSearchRequest, FlightSearchResponse,
-)
 from app.models.common import Money
+from app.models.flights import (
+    FareCalendarPoint,
+    FlightSearchRequest,
+    FlightSearchResponse,
+)
 from app.services import providers
 from app.storage import search_history
 
@@ -26,13 +27,13 @@ async def search(req: FlightSearchRequest) -> FlightSearchResponse:
     return resp
 
 
-@router.get("/fare-calendar", response_model=List[FareCalendarPoint])
+@router.get("/fare-calendar", response_model=list[FareCalendarPoint])
 async def fare_calendar(origin: str = Query(...), destination: str = Query(...),
                         start_date: date = Query(...),
                         days: int = Query(7, ge=1, le=30),
-                        currency: str = "USD") -> List[FareCalendarPoint]:
+                        currency: str = "USD") -> list[FareCalendarPoint]:
     """Probe fare across consecutive departure dates (one-way)."""
-    points: List[FareCalendarPoint] = []
+    points: list[FareCalendarPoint] = []
     for offset in range(days):
         d = start_date + timedelta(days=offset)
         try:

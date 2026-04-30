@@ -1,8 +1,6 @@
 """AI-powered translator + phrasebook generator."""
 from __future__ import annotations
 
-from typing import List
-
 from app.ai.claude_client import claude_call
 from app.models.translator import Phrasebook, PhrasebookEntry, TranslateRequest, TranslationResult
 
@@ -27,7 +25,7 @@ ALWAYS respond with valid JSON only.
 """
 
 
-def _phrasebook_user_prompt(target_language: str, scenarios: List[str]) -> str:
+def _phrasebook_user_prompt(target_language: str, scenarios: list[str]) -> str:
     return f"""Generate a travel phrasebook for: {target_language}
 
 SCENARIOS to cover: {", ".join(scenarios)}
@@ -45,14 +43,14 @@ Generate at least 30 entries spread across all listed scenarios.
 """
 
 
-def phrasebook(target_language: str, scenarios: List[str]) -> Phrasebook:
+def phrasebook(target_language: str, scenarios: list[str]) -> Phrasebook:
     scenarios = scenarios or ["greetings", "restaurant", "transport", "emergency", "shopping"]
     data = claude_call(
         system=PHRASEBOOK_SYSTEM,
         user=_phrasebook_user_prompt(target_language, scenarios),
         max_tokens=3072, json_mode=True,
     )
-    entries: List[PhrasebookEntry] = []
+    entries: list[PhrasebookEntry] = []
     for raw in data.get("entries") or []:
         try:
             entries.append(PhrasebookEntry(

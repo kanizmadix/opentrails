@@ -3,7 +3,7 @@ from __future__ import annotations
 
 import json
 from datetime import datetime
-from typing import Any, Dict, List, Optional
+from typing import Any
 
 from app.db import cursor
 from app.models.trips import SearchHistoryItem
@@ -25,9 +25,9 @@ def _row_to_item(row) -> SearchHistoryItem:
     )
 
 
-def log_search(domain: str, query: Dict[str, Any], *,
-               result_count: Optional[int] = None,
-               duration_ms: Optional[int] = None) -> SearchHistoryItem:
+def log_search(domain: str, query: dict[str, Any], *,
+               result_count: int | None = None,
+               duration_ms: int | None = None) -> SearchHistoryItem:
     with cursor() as cur:
         cur.execute(
             """INSERT INTO search_history (domain, query_json, result_count, duration_ms)
@@ -40,7 +40,7 @@ def log_search(domain: str, query: Dict[str, Any], *,
     return _row_to_item(row)
 
 
-def list_history(domain: Optional[str] = None, limit: int = 50) -> List[SearchHistoryItem]:
+def list_history(domain: str | None = None, limit: int = 50) -> list[SearchHistoryItem]:
     with cursor() as cur:
         if domain:
             cur.execute(

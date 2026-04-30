@@ -1,7 +1,7 @@
 """AI-powered 'best bundle' recommender — picks flight + hotel + attractions."""
 from __future__ import annotations
 
-from typing import Any, Dict, List
+from typing import Any
 
 from app.ai.claude_client import claude_call
 from app.models.attractions import Attraction
@@ -21,7 +21,7 @@ ALWAYS respond with valid JSON only.
 """
 
 
-def _summarize_flights(flights: List[FlightOffer]) -> str:
+def _summarize_flights(flights: list[FlightOffer]) -> str:
     rows = []
     for f in flights[:10]:
         total_min = sum(s.duration_minutes for s in f.segments)
@@ -32,7 +32,7 @@ def _summarize_flights(flights: List[FlightOffer]) -> str:
     return "\n".join(rows) or "(no candidates)"
 
 
-def _summarize_hotels(hotels: List[HotelOffer]) -> str:
+def _summarize_hotels(hotels: list[HotelOffer]) -> str:
     rows = []
     for h in hotels[:10]:
         rows.append(
@@ -43,14 +43,14 @@ def _summarize_hotels(hotels: List[HotelOffer]) -> str:
     return "\n".join(rows) or "(no candidates)"
 
 
-def _summarize_attractions(attractions: List[Attraction]) -> str:
+def _summarize_attractions(attractions: list[Attraction]) -> str:
     rows = [f"- xid={a.xid} {a.name} ({a.category.value})" for a in attractions[:25]]
     return "\n".join(rows) or "(no candidates)"
 
 
-def recommend_bundle(trip: TripRecord, flights: List[FlightOffer],
-                     hotels: List[HotelOffer],
-                     attractions: List[Attraction]) -> Dict[str, Any]:
+def recommend_bundle(trip: TripRecord, flights: list[FlightOffer],
+                     hotels: list[HotelOffer],
+                     attractions: list[Attraction]) -> dict[str, Any]:
     user = f"""TRIP: {trip.name} -> {trip.destination}
 DATES: {trip.start_date} to {trip.end_date}
 TRAVELERS: {trip.travelers}

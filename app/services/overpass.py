@@ -1,7 +1,7 @@
 """Overpass API client for OpenStreetMap POI queries (free, no key)."""
 from __future__ import annotations
 
-from typing import Iterable, List, Tuple
+from collections.abc import Iterable
 
 from app.config import settings
 from app.logger import get_logger
@@ -29,7 +29,7 @@ CATEGORY_TAGS: dict[str, list[str]] = {
 }
 
 
-def _build_query(bbox: Tuple[float, float, float, float], categories: Iterable[str]) -> str:
+def _build_query(bbox: tuple[float, float, float, float], categories: Iterable[str]) -> str:
     south, west, north, east = bbox
     selectors: list[str] = []
     for cat in categories or ["tourism"]:
@@ -45,8 +45,8 @@ def _build_query(bbox: Tuple[float, float, float, float], categories: Iterable[s
     return f"[out:json][timeout:25];\n(\n{body}\n);\nout center 100;"
 
 
-async def query_pois(bbox: Tuple[float, float, float, float],
-                     categories: Iterable[str] | None = None) -> List[dict]:
+async def query_pois(bbox: tuple[float, float, float, float],
+                     categories: Iterable[str] | None = None) -> list[dict]:
     """Query POIs in a bounding box (south, west, north, east)."""
     cats = list(categories or ["tourism"])
     cache_key = f"overpass:{bbox}:{','.join(sorted(cats))}"
@@ -63,7 +63,7 @@ async def query_pois(bbox: Tuple[float, float, float, float],
     raw = await cache.get_or_set(cache_key, _fetch, ttl=_CACHE_TTL)
     if not isinstance(raw, dict):
         return []
-    out: List[dict] = []
+    out: list[dict] = []
     for el in raw.get("elements", []):
         tags = el.get("tags") or {}
         name = tags.get("name") or tags.get("name:en")

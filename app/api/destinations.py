@@ -1,8 +1,6 @@
 """Destination intel API."""
 from __future__ import annotations
 
-from typing import List
-
 from fastapi import APIRouter, Query
 
 from app.ai import destination_intel
@@ -15,8 +13,8 @@ TAGS = ["destinations"]
 router = APIRouter()
 
 
-@router.get("/search", response_model=List[Place])
-async def search(q: str = Query(..., min_length=1)) -> List[Place]:
+@router.get("/search", response_model=list[Place])
+async def search(q: str = Query(..., min_length=1)) -> list[Place]:
     return await nominatim.geocode(q, limit=8)
 
 

@@ -2,7 +2,6 @@
 from __future__ import annotations
 
 from datetime import date
-from typing import Optional
 
 from pydantic import BaseModel, Field
 
@@ -14,12 +13,12 @@ class GeoPoint(BaseModel):
 
 class Place(BaseModel):
     name: str
-    country: Optional[str] = None
-    country_code: Optional[str] = None
-    region: Optional[str] = None
-    geo: Optional[GeoPoint] = None
-    osm_id: Optional[int] = None
-    wikidata_id: Optional[str] = None
+    country: str | None = None
+    country_code: str | None = None
+    region: str | None = None
+    geo: GeoPoint | None = None
+    osm_id: int | None = None
+    wikidata_id: str | None = None
 
 
 class Money(BaseModel):

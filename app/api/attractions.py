@@ -1,12 +1,13 @@
 """Attractions API."""
 from __future__ import annotations
 
-from typing import List
-
 from fastapi import APIRouter, Query
 
 from app.models.attractions import (
-    AttractionCategory, AttractionDetail, AttractionSearchRequest, AttractionsResponse,
+    AttractionCategory,
+    AttractionDetail,
+    AttractionSearchRequest,
+    AttractionsResponse,
 )
 from app.services import opentripmap, providers
 from app.storage import search_history
@@ -43,6 +44,6 @@ async def detail(xid: str) -> AttractionDetail:
     return await opentripmap.poi_detail(xid)
 
 
-@router.get("/categories", response_model=List[str])
-async def categories() -> List[str]:
+@router.get("/categories", response_model=list[str])
+async def categories() -> list[str]:
     return [c.value for c in AttractionCategory]

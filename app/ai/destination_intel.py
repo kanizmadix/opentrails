@@ -1,11 +1,15 @@
 """AI synthesis of destination intelligence (safety, etiquette, scams, visa)."""
 from __future__ import annotations
 
-from typing import Any, Dict
+from typing import Any
 
 from app.ai.claude_client import claude_call
 from app.models.destinations import (
-    BestSeasonInfo, CountryProfile, DestinationIntel, VisaInfo, WeatherSummary,
+    BestSeasonInfo,
+    CountryProfile,
+    DestinationIntel,
+    VisaInfo,
+    WeatherSummary,
 )
 
 SYSTEM_PROMPT = """You are a seasoned travel advisor. Given a country profile, weather data,
@@ -24,7 +28,7 @@ ALWAYS respond with valid JSON only. Be honest about uncertainty.
 """
 
 
-def _user_prompt(country: CountryProfile, wikivoyage: Dict[str, Any],
+def _user_prompt(country: CountryProfile, wikivoyage: dict[str, Any],
                  weather: WeatherSummary) -> str:
     wv_extract = (wikivoyage or {}).get("extract") or "(no Wikivoyage data)"
     return f"""Compile destination intel for {country.name}.
@@ -58,7 +62,7 @@ Respond with JSON:
 """
 
 
-def compile_intel(country: CountryProfile, wikivoyage: Dict[str, Any],
+def compile_intel(country: CountryProfile, wikivoyage: dict[str, Any],
                   weather: WeatherSummary) -> DestinationIntel:
     data = claude_call(system=SYSTEM_PROMPT,
                        user=_user_prompt(country, wikivoyage, weather),

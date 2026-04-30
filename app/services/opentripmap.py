@@ -1,8 +1,6 @@
 """OpenTripMap POI service. Falls back to Overpass+Wikipedia if no API key."""
 from __future__ import annotations
 
-from typing import List, Optional
-
 from app.config import settings
 from app.logger import get_logger
 from app.models.attractions import Attraction, AttractionCategory, AttractionDetail
@@ -47,8 +45,8 @@ def _has_key() -> bool:
 
 
 async def pois_radius(lat: float, lon: float, *, radius_m: int = 2000,
-                      kinds: Optional[List[str]] = None, limit: int = 30,
-                      min_rate: int = 0) -> List[Attraction]:
+                      kinds: list[str] | None = None, limit: int = 30,
+                      min_rate: int = 0) -> list[Attraction]:
     """Search POIs within radius. Falls back to Overpass when API key absent."""
     if _has_key():
         return await _otm_pois_radius(lat, lon, radius_m=radius_m, kinds=kinds,
@@ -56,8 +54,8 @@ async def pois_radius(lat: float, lon: float, *, radius_m: int = 2000,
     return await _fallback_pois_radius(lat, lon, radius_m=radius_m, kinds=kinds, limit=limit)
 
 
-async def _otm_pois_radius(lat: float, lon: float, *, radius_m: int, kinds: Optional[List[str]],
-                           limit: int, min_rate: int) -> List[Attraction]:
+async def _otm_pois_radius(lat: float, lon: float, *, radius_m: int, kinds: list[str] | None,
+                           limit: int, min_rate: int) -> list[Attraction]:
     kinds_str = ",".join(kinds) if kinds else "interesting_places"
     cache_key = f"otm:radius:{lat:.3f}:{lon:.3f}:{radius_m}:{kinds_str}:{limit}:{min_rate}"
 
@@ -73,7 +71,7 @@ async def _otm_pois_radius(lat: float, lon: float, *, radius_m: int, kinds: Opti
     raw = await cache.get_or_set(cache_key, _fetch, ttl=_CACHE_TTL)
     if not isinstance(raw, list):
         return []
-    out: List[Attraction] = []
+    out: list[Attraction] = []
     for item in raw:
         name = item.get("name")
         if not name:
@@ -94,12 +92,12 @@ async def _otm_pois_radius(lat: float, lon: float, *, radius_m: int, kinds: Opti
 
 
 async def _fallback_pois_radius(lat: float, lon: float, *, radius_m: int,
-                                kinds: Optional[List[str]], limit: int) -> List[Attraction]:
+                                kinds: list[str] | None, limit: int) -> list[Attraction]:
     deg = max(radius_m / 111000.0, 0.005)
     bbox = (lat - deg, lon - deg, lat + deg, lon + deg)
     cats = kinds or ["tourism", "historic", "museum"]
     pois = await overpass.query_pois(bbox, categories=cats)
-    out: List[Attraction] = []
+    out: list[Attraction] = []
     for p in pois[:limit]:
         tags = p.get("tags", {})
         kinds_list = [f"{k}={v}" for k, v in tags.items()

@@ -1,8 +1,6 @@
 """Wishlist API."""
 from __future__ import annotations
 
-from typing import List, Optional
-
 from fastapi import APIRouter, status
 
 from app.models.trips import WishlistItem
@@ -18,8 +16,8 @@ async def add(item: WishlistItem) -> WishlistItem:
     return wishlist_storage.add_to_wishlist(item)
 
 
-@router.get("", response_model=List[WishlistItem])
-async def list_(kind: Optional[str] = None, limit: int = 100) -> List[WishlistItem]:
+@router.get("", response_model=list[WishlistItem])
+async def list_(kind: str | None = None, limit: int = 100) -> list[WishlistItem]:
     return wishlist_storage.list_wishlist(kind=kind, limit=limit)
 
 

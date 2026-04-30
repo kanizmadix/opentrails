@@ -2,7 +2,7 @@
 from __future__ import annotations
 
 from datetime import date, datetime, timedelta
-from typing import Any, Dict, List
+from typing import Any
 
 from app.config import settings
 from app.exceptions import ConfigurationError
@@ -21,7 +21,7 @@ def _ensure_key() -> None:
 
 async def flight_search(*, origin: str, destination: str, date_from: date,
                         date_to: date | None = None, adults: int = 1,
-                        currency: str = "USD", limit: int = 20) -> List[FlightOffer]:
+                        currency: str = "USD", limit: int = 20) -> list[FlightOffer]:
     _ensure_key()
     date_to = date_to or date_from + timedelta(days=1)
     params = {
@@ -39,8 +39,8 @@ async def flight_search(*, origin: str, destination: str, date_from: date,
     return [_to_offer(item, currency) for item in (raw.get("data") or [])]
 
 
-def _to_offer(item: Dict[str, Any], currency: str) -> FlightOffer:
-    segments: List[FlightSegment] = []
+def _to_offer(item: dict[str, Any], currency: str) -> FlightOffer:
+    segments: list[FlightSegment] = []
     for route in item.get("route", []):
         segments.append(FlightSegment(
             origin=route.get("flyFrom", ""),

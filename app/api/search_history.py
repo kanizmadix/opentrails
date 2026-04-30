@@ -1,8 +1,6 @@
 """Search history API."""
 from __future__ import annotations
 
-from typing import List
-
 from fastapi import APIRouter, status
 
 from app.models.trips import SearchHistoryItem
@@ -13,13 +11,13 @@ TAGS = ["search-history"]
 router = APIRouter()
 
 
-@router.get("", response_model=List[SearchHistoryItem])
-async def list_(limit: int = 50) -> List[SearchHistoryItem]:
+@router.get("", response_model=list[SearchHistoryItem])
+async def list_(limit: int = 50) -> list[SearchHistoryItem]:
     return history_storage.list_history(limit=limit)
 
 
-@router.get("/{domain}", response_model=List[SearchHistoryItem])
-async def by_domain(domain: str, limit: int = 50) -> List[SearchHistoryItem]:
+@router.get("/{domain}", response_model=list[SearchHistoryItem])
+async def by_domain(domain: str, limit: int = 50) -> list[SearchHistoryItem]:
     return history_storage.list_history(domain=domain, limit=limit)
 
 

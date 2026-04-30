@@ -5,15 +5,18 @@ remains usable in dev mode.
 """
 from __future__ import annotations
 
-from datetime import date, datetime, timedelta
-from typing import List
+from datetime import datetime, timedelta
 
 from app.config import settings
 from app.logger import get_logger
 from app.models.attractions import Attraction, AttractionCategory
 from app.models.common import GeoPoint, Money
 from app.models.flights import (
-    FlightOffer, FlightPrice, FlightSearchRequest, FlightSearchResponse, FlightSegment,
+    FlightOffer,
+    FlightPrice,
+    FlightSearchRequest,
+    FlightSearchResponse,
+    FlightSegment,
 )
 from app.models.hotels import HotelAmenities, HotelOffer, HotelSearchRequest, HotelSearchResponse
 from app.services import amadeus, kiwi, opentripmap
@@ -34,7 +37,7 @@ def _has_kiwi() -> bool:
 
 async def search_flights(req: FlightSearchRequest) -> FlightSearchResponse:
     provider = "mock"
-    offers: List[FlightOffer] = []
+    offers: list[FlightOffer] = []
     if _has_amadeus():
         provider = "amadeus"
         try:
@@ -69,7 +72,7 @@ async def search_flights(req: FlightSearchRequest) -> FlightSearchResponse:
     )
 
 
-def _mock_flights(req: FlightSearchRequest) -> List[FlightOffer]:
+def _mock_flights(req: FlightSearchRequest) -> list[FlightOffer]:
     base = datetime.combine(req.departure_date, datetime.min.time()).replace(hour=8)
     return [
         FlightOffer(
@@ -93,7 +96,7 @@ def _mock_flights(req: FlightSearchRequest) -> List[FlightOffer]:
 
 async def search_hotels(req: HotelSearchRequest) -> HotelSearchResponse:
     provider = "mock"
-    offers: List[HotelOffer] = []
+    offers: list[HotelOffer] = []
     if _has_amadeus():
         provider = "amadeus"
         try:
@@ -112,7 +115,7 @@ async def search_hotels(req: HotelSearchRequest) -> HotelSearchResponse:
     )
 
 
-def _mock_hotels(req: HotelSearchRequest) -> List[HotelOffer]:
+def _mock_hotels(req: HotelSearchRequest) -> list[HotelOffer]:
     nights = max((req.check_out - req.check_in).days, 1)
     return [
         HotelOffer(
@@ -132,8 +135,8 @@ def _mock_hotels(req: HotelSearchRequest) -> List[HotelOffer]:
 
 
 async def search_attractions(*, lat: float, lon: float, radius_m: int = 2000,
-                             kinds: List[str] | None = None,
-                             limit: int = 30) -> tuple[List[Attraction], str]:
+                             kinds: list[str] | None = None,
+                             limit: int = 30) -> tuple[list[Attraction], str]:
     """Returns (attractions, provider). OpenTripMap if keyed, else Overpass."""
     items = await opentripmap.pois_radius(lat, lon, radius_m=radius_m, kinds=kinds, limit=limit)
     provider = "opentripmap" if settings.OPENTRIPMAP_API_KEY else "overpass"
@@ -143,7 +146,7 @@ async def search_attractions(*, lat: float, lon: float, radius_m: int = 2000,
     return items, provider
 
 
-def _mock_attractions(lat: float, lon: float, limit: int) -> List[Attraction]:
+def _mock_attractions(lat: float, lon: float, limit: int) -> list[Attraction]:
     return [
         Attraction(
             xid=f"mock:{i}",

@@ -2,7 +2,6 @@
 from __future__ import annotations
 
 from datetime import date
-from typing import Dict, Optional
 
 from app.config import settings
 from app.logger import get_logger
@@ -15,7 +14,7 @@ _CACHE_TTL = 60 * 60 * 6  # 6h
 
 
 async def convert(from_ccy: str, to_ccy: str, *, amount: float = 1.0,
-                  on_date: Optional[date] = None) -> Dict[str, float]:
+                  on_date: date | None = None) -> dict[str, float]:
     """Return {amount, rate, from, to, date}."""
     from_ccy = from_ccy.upper()
     to_ccy = to_ccy.upper()
@@ -43,7 +42,7 @@ async def convert(from_ccy: str, to_ccy: str, *, amount: float = 1.0,
     }
 
 
-async def latest_rates(base: str = "USD") -> Dict[str, float]:
+async def latest_rates(base: str = "USD") -> dict[str, float]:
     """Get latest ECB rates with given base."""
     base = base.upper()
     key = f"frankfurter:latest:{base}"

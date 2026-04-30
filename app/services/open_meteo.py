@@ -1,7 +1,7 @@
 """Open-Meteo weather forecast and historical climate. Free, no API key."""
 from __future__ import annotations
 
-from typing import Any, Dict
+from typing import Any
 
 from app.config import settings
 from app.logger import get_logger
@@ -20,7 +20,7 @@ async def forecast(lat: float, lon: float, *, days: int = 7) -> WeatherSummary:
     days = max(1, min(days, 16))
     key = f"open-meteo:forecast:{lat:.3f}:{lon:.3f}:{days}"
 
-    async def _fetch() -> Dict[str, Any]:
+    async def _fetch() -> dict[str, Any]:
         url = f"{settings.OPEN_METEO_BASE}/forecast"
         params = {
             "latitude": lat,
@@ -39,7 +39,7 @@ async def historical_climate(lat: float, lon: float) -> WeatherSummary:
     """Coarse climate normals using ERA5 monthly aggregation (last full year)."""
     key = f"open-meteo:climate:{lat:.3f}:{lon:.3f}"
 
-    async def _fetch() -> Dict[str, Any]:
+    async def _fetch() -> dict[str, Any]:
         url = f"{settings.OPEN_METEO_BASE.replace('api.open-meteo.com', 'archive-api.open-meteo.com')}/archive"
         params = {
             "latitude": lat,
@@ -55,7 +55,7 @@ async def historical_climate(lat: float, lon: float) -> WeatherSummary:
     return _summarize(raw)
 
 
-def _summarize(raw: Dict[str, Any]) -> WeatherSummary:
+def _summarize(raw: dict[str, Any]) -> WeatherSummary:
     daily = raw.get("daily") or {}
     highs = [float(x) for x in (daily.get("temperature_2m_max") or []) if x is not None]
     lows = [float(x) for x in (daily.get("temperature_2m_min") or []) if x is not None]

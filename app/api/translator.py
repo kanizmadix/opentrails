@@ -1,8 +1,6 @@
 """Translator API."""
 from __future__ import annotations
 
-from typing import List
-
 from fastapi import APIRouter
 from pydantic import BaseModel, Field
 
@@ -16,7 +14,7 @@ router = APIRouter()
 
 class PhrasebookRequest(BaseModel):
     target_language: str = Field(..., min_length=2)
-    scenarios: List[str] = Field(
+    scenarios: list[str] = Field(
         default_factory=lambda: ["greetings", "restaurant", "transport", "emergency", "shopping"]
     )
 

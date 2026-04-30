@@ -1,8 +1,6 @@
 """Maps and geocoding API."""
 from __future__ import annotations
 
-from typing import List, Optional
-
 from fastapi import APIRouter, HTTPException, Query
 
 from app.models.common import Place
@@ -13,15 +11,15 @@ TAGS = ["maps"]
 router = APIRouter()
 
 
-@router.get("/geocode", response_model=List[Place])
+@router.get("/geocode", response_model=list[Place])
 async def geocode(q: str = Query(..., min_length=1),
-                  limit: int = Query(5, ge=1, le=20)) -> List[Place]:
+                  limit: int = Query(5, ge=1, le=20)) -> list[Place]:
     return await nominatim.geocode(q, limit=limit)
 
 
-@router.get("/reverse", response_model=Optional[Place])
+@router.get("/reverse", response_model=Place | None)
 async def reverse(lat: float = Query(..., ge=-90, le=90),
-                  lon: float = Query(..., ge=-180, le=180)) -> Optional[Place]:
+                  lon: float = Query(..., ge=-180, le=180)) -> Place | None:
     place = await nominatim.reverse(lat, lon)
     if not place:
         raise HTTPException(status_code=404, detail="No location found")

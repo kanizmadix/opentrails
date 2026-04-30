@@ -1,64 +1,62 @@
 """Destination intelligence and country profile models."""
 from __future__ import annotations
 
-from typing import Dict, List, Optional
-
 from pydantic import BaseModel, Field
 
 
 class VisaInfo(BaseModel):
     requirement: str = Field(..., description="visa-free / visa-on-arrival / e-visa / required / unknown")
-    max_stay_days: Optional[int] = None
-    notes: Optional[str] = None
-    source: Optional[str] = None
+    max_stay_days: int | None = None
+    notes: str | None = None
+    source: str | None = None
 
 
 class WeatherSummary(BaseModel):
-    daily_high_c: List[float] = Field(default_factory=list)
-    daily_low_c: List[float] = Field(default_factory=list)
-    daily_precip_mm: List[float] = Field(default_factory=list)
-    dates: List[str] = Field(default_factory=list)
-    summary: Optional[str] = None
-    avg_high_c: Optional[float] = None
-    avg_low_c: Optional[float] = None
-    rainy_days: Optional[int] = None
+    daily_high_c: list[float] = Field(default_factory=list)
+    daily_low_c: list[float] = Field(default_factory=list)
+    daily_precip_mm: list[float] = Field(default_factory=list)
+    dates: list[str] = Field(default_factory=list)
+    summary: str | None = None
+    avg_high_c: float | None = None
+    avg_low_c: float | None = None
+    rainy_days: int | None = None
 
 
 class BestSeasonInfo(BaseModel):
-    best_months: List[str] = Field(default_factory=list)
-    avoid_months: List[str] = Field(default_factory=list)
-    reason: Optional[str] = None
+    best_months: list[str] = Field(default_factory=list)
+    avoid_months: list[str] = Field(default_factory=list)
+    reason: str | None = None
 
 
 class CountryProfile(BaseModel):
     name: str
-    official_name: Optional[str] = None
-    code_alpha2: Optional[str] = None
-    code_alpha3: Optional[str] = None
-    capital: Optional[str] = None
-    region: Optional[str] = None
-    subregion: Optional[str] = None
-    population: Optional[int] = None
-    area_km2: Optional[float] = None
-    languages: Dict[str, str] = Field(default_factory=dict)
-    currencies: Dict[str, Dict[str, str]] = Field(default_factory=dict)
-    timezones: List[str] = Field(default_factory=list)
-    flag_emoji: Optional[str] = None
-    flag_svg: Optional[str] = None
-    calling_code: Optional[str] = None
-    drives_on: Optional[str] = None
-    plug_types: List[str] = Field(default_factory=list)
+    official_name: str | None = None
+    code_alpha2: str | None = None
+    code_alpha3: str | None = None
+    capital: str | None = None
+    region: str | None = None
+    subregion: str | None = None
+    population: int | None = None
+    area_km2: float | None = None
+    languages: dict[str, str] = Field(default_factory=dict)
+    currencies: dict[str, dict[str, str]] = Field(default_factory=dict)
+    timezones: list[str] = Field(default_factory=list)
+    flag_emoji: str | None = None
+    flag_svg: str | None = None
+    calling_code: str | None = None
+    drives_on: str | None = None
+    plug_types: list[str] = Field(default_factory=list)
 
 
 class DestinationIntel(BaseModel):
     country: CountryProfile
-    visa: Optional[VisaInfo] = None
-    weather: Optional[WeatherSummary] = None
-    best_season: Optional[BestSeasonInfo] = None
-    safety_tips: List[str] = Field(default_factory=list)
-    cultural_etiquette: List[str] = Field(default_factory=list)
-    common_scams: List[str] = Field(default_factory=list)
-    tipping_norms: Optional[str] = None
-    emergency_numbers: Dict[str, str] = Field(default_factory=dict)
-    summary: Optional[str] = None
-    wikivoyage_url: Optional[str] = None
+    visa: VisaInfo | None = None
+    weather: WeatherSummary | None = None
+    best_season: BestSeasonInfo | None = None
+    safety_tips: list[str] = Field(default_factory=list)
+    cultural_etiquette: list[str] = Field(default_factory=list)
+    common_scams: list[str] = Field(default_factory=list)
+    tipping_norms: str | None = None
+    emergency_numbers: dict[str, str] = Field(default_factory=dict)
+    summary: str | None = None
+    wikivoyage_url: str | None = None

@@ -2,7 +2,6 @@
 from __future__ import annotations
 
 from datetime import date, datetime
-from typing import List, Optional
 
 from pydantic import BaseModel, Field
 
@@ -16,9 +15,9 @@ class HotelSearchRequest(BaseModel):
     adults: int = Field(2, ge=1, le=8)
     rooms: int = Field(1, ge=1, le=4)
     currency: str = Field("USD", min_length=3, max_length=3)
-    min_rating: Optional[float] = Field(None, ge=0, le=5)
-    max_price_per_night: Optional[float] = None
-    amenities: List[str] = Field(default_factory=list)
+    min_rating: float | None = Field(None, ge=0, le=5)
+    max_price_per_night: float | None = None
+    amenities: list[str] = Field(default_factory=list)
     max_results: int = Field(20, ge=1, le=100)
 
 
@@ -38,33 +37,33 @@ class HotelAmenities(BaseModel):
 
 
 class HotelReviewSummary(BaseModel):
-    score: Optional[float] = Field(None, ge=0, le=10)
-    count: Optional[int] = None
-    source: Optional[str] = None
-    cleanliness: Optional[float] = None
-    location: Optional[float] = None
-    value: Optional[float] = None
+    score: float | None = Field(None, ge=0, le=10)
+    count: int | None = None
+    source: str | None = None
+    cleanliness: float | None = None
+    location: float | None = None
+    value: float | None = None
 
 
 class HotelOffer(BaseModel):
     id: str
     provider: str
     name: str
-    address: Optional[str] = None
-    geo: Optional[GeoPoint] = None
-    star_rating: Optional[float] = None
-    review: Optional[HotelReviewSummary] = None
+    address: str | None = None
+    geo: GeoPoint | None = None
+    star_rating: float | None = None
+    review: HotelReviewSummary | None = None
     amenities: HotelAmenities = Field(default_factory=HotelAmenities)
-    photo_url: Optional[str] = None
+    photo_url: str | None = None
     nightly_price: Money
     total_price: Money
-    booking_url: Optional[str] = None
-    cancellation_policy: Optional[str] = None
-    distance_to_center_km: Optional[float] = None
+    booking_url: str | None = None
+    cancellation_policy: str | None = None
+    distance_to_center_km: float | None = None
 
 
 class HotelSearchResponse(BaseModel):
     request: HotelSearchRequest
-    offers: List[HotelOffer]
+    offers: list[HotelOffer]
     provider: str
     fetched_at: datetime
