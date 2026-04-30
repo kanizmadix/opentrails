@@ -60,4 +60,112 @@ opentrails/
 └── .github/workflows/ci.yml
 ```
 
-More features and full API docs added in subsequent commits.
+## API reference
+
+All routes are versioned under `/api/*`. Open `http://localhost:8000/docs` for interactive Swagger UI.
+
+### Health
+- `GET /api/health` — liveness + Claude key presence
+
+### Maps & geocoding
+- `GET /api/maps/geocode?q=...` — Nominatim search
+- `GET /api/maps/reverse?lat=..&lon=..` — reverse geocode
+- `GET /api/maps/pois?bbox=s,w,n,e&kinds=tourism,historic` — Overpass POIs
+
+### Destinations
+- `GET /api/destinations/search?q=...` — text search
+- `GET /api/destinations/{country_code}/intel` — full destination intel (Claude-synthesized)
+- `GET /api/destinations/weather?lat=..&lon=..&days=7` — Open-Meteo forecast
+- `GET /api/destinations/currency?from=USD&to=EUR&amount=100` — Frankfurter conversion
+
+### Flights
+- `POST /api/flights/search` — multi-provider flight offers
+- `GET /api/flights/fare-calendar?origin=&destination=&start_date=&days=` — cheapest fare per day
+
+### Hotels
+- `POST /api/hotels/search`
+- `GET /api/hotels/detail/{hotel_id}`
+
+### Attractions
+- `GET /api/attractions/search?lat=&lon=&radius_m=&kinds=&limit=`
+- `GET /api/attractions/detail/{xid}`
+- `GET /api/attractions/categories`
+
+### Itinerary
+- `POST /api/itinerary/generate` — Claude builds day-by-day plan
+- `POST /api/itinerary/save?trip_id=...` — persist to DB
+- `GET /api/itinerary/trip/{trip_id}` — saved plan
+
+### Trips (CRUD)
+- `POST /api/trips`, `GET /api/trips`, `GET /api/trips/{id}`,
+  `PATCH /api/trips/{id}`, `DELETE /api/trips/{id}`
+
+### Wishlist
+- `POST /api/wishlist`, `GET /api/wishlist?kind=...`, `DELETE /api/wishlist/{id}`
+
+### Translator
+- `POST /api/translator/phrasebook` — generate 30+ travel phrases via Claude
+- `POST /api/translator/translate` — single phrase
+
+### Packing
+- `POST /api/packing/generate` — destination + dates + activities -> categorized list
+
+### Search history
+- `GET /api/search-history`, `GET /api/search-history/{domain}`,
+  `DELETE /api/search-history/{domain}`
+
+## Environment variables
+
+| Variable | Required | Default | Purpose |
+|----------|----------|---------|---------|
+| `ANTHROPIC_API_KEY` | yes | — | Claude API key (`claude-sonnet-4-6` with prompt caching) |
+| `CLAUDE_MODEL` | no | `claude-sonnet-4-6` | Override model id |
+| `CLAUDE_MAX_TOKENS` | no | `2048` | Per-call default |
+| `AMADEUS_CLIENT_ID` / `AMADEUS_CLIENT_SECRET` | no | — | Real flight + hotel offers |
+| `KIWI_API_KEY` | no | — | Kiwi Tequila flight fallback |
+| `OPENTRIPMAP_API_KEY` | no | — | Higher-quality POI data |
+| `DATABASE_URL` | no | `sqlite:///./data/opentrails.db` | SQLite path |
+| `LOG_LEVEL` | no | `INFO` | Log verbosity |
+| `RATE_LIMIT_PER_MINUTE` | no | `120` | Per-IP cap |
+| `CACHE_TTL_SECONDS` | no | `900` | Default upstream cache TTL |
+| `CORS_ORIGINS` | no | `*` | Comma-separated allowlist |
+
+Without provider keys, the API returns clearly-tagged `provider: "mock"` payloads so the
+frontend remains usable in dev mode.
+
+## Testing
+
+```bash
+make install
+make test    # pytest -q (mocks all upstream HTTP via respx)
+make lint    # ruff check .
+```
+
+The CI workflow at `.github/workflows/ci.yml` runs the same on every push / PR.
+
+## Deployment
+
+### Docker
+
+```bash
+make docker-build
+make docker-run
+# or:
+docker compose up -d
+```
+
+The image runs on Python 3.11-slim as a non-root `app` user, exposes port 8000,
+and includes a `/api/health` HTTP healthcheck. The SQLite DB lives in the
+`/app/data` volume.
+
+### Bare metal
+
+```bash
+make install
+make init-db
+make dev   # uvicorn with --reload
+```
+
+Behind a reverse proxy (Nginx / Caddy), terminate TLS at the proxy and forward
+`/` and `/api/*` to `127.0.0.1:8000`.
+
