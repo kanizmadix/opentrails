@@ -1,0 +1,71 @@
+/* Base typography, html/body, links, focus rings */
+html {
+  scroll-behavior: smooth;
+  color-scheme: light dark;
+}
+
+body {
+  font-family: var(--font-sans);
+  font-size: var(--fs-body);
+  font-weight: var(--fw-regular);
+  letter-spacing: var(--tracking-base);
+  color: var(--color-ink);
+  background: var(--color-bg);
+  min-height: 100vh;
+  transition: background-color var(--dur-base) var(--ease-out), color var(--dur-base) var(--ease-out);
+}
+
+a {
+  color: var(--color-accent);
+  transition: color var(--dur-fast) var(--ease-out), opacity var(--dur-fast) var(--ease-out);
+}
+a:hover { color: var(--color-accent-hover); text-decoration: underline; text-underline-offset: 3px; }
+a:focus-visible { outline: none; box-shadow: var(--shadow-focus); border-radius: 4px; }
+
+h1, h2, h3, h4, h5, h6 {
+  font-weight: var(--fw-semibold);
+  letter-spacing: var(--tracking-tight);
+  line-height: var(--lh-snug);
+  color: var(--color-ink);
+}
+
+p { color: var(--color-ink); }
+
+::selection {
+  background: var(--color-accent);
+  color: white;
+}
+
+button:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible,
+[tabindex]:focus-visible {
+  outline: none;
+  box-shadow: var(--shadow-focus);
+}
+
+hr {
+  border: 0;
+  height: 1px;
+  background: var(--color-divider);
+  margin: var(--space-8) 0;
+}
+
+code, pre {
+  font-family: var(--font-mono);
+  font-size: 0.95em;
+}
+
+code {
+  background: var(--color-surface);
+  padding: 2px 6px;
+  border-radius: var(--radius-xs);
+}
+
+img { -webkit-user-drag: none; user-select: none; }
+
+/* Honor reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+}
