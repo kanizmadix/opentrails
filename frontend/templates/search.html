@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+
+{% block title %}Search · OpenTrails{% endblock %}
+{% block body_class %}page-search{% endblock %}
+{% block head_css %}<link rel="stylesheet" href="/static/css/pages/search.css">{% endblock %}
+
+{% block content %}
+<section class="search-hero">
+  <div class="container-narrow">
+    <h1 class="t-balance">Search across everything.</h1>
+    <p class="t-body-lg muted t-balance">Destinations, flights, hotels, attractions — one box, all sources.</p>
+
+    <form id="search-form" class="search-wrap" style="margin-top: 32px;">
+      <input id="search-input" type="search" name="q" class="input input-search" placeholder="Where to?" data-search-bar autocomplete="off" aria-label="Search">
+    </form>
+
+    <div class="search-tabs" role="tablist" aria-label="Result categories">
+      <button class="search-tab" role="tab" data-tab="destinations" aria-selected="true">Destinations</button>
+      <button class="search-tab" role="tab" data-tab="attractions" aria-selected="false">Attractions</button>
+      <button class="search-tab" role="tab" data-tab="flights" aria-selected="false">Flights</button>
+      <button class="search-tab" role="tab" data-tab="hotels" aria-selected="false">Hotels</button>
+    </div>
+  </div>
+</section>
+
+<section class="section-tight">
+  <div class="container">
+    <div class="search-tabpanel" role="tabpanel" data-tab="destinations" data-active="true"></div>
+    <div class="search-tabpanel" role="tabpanel" data-tab="attractions" data-active="false"></div>
+    <div class="search-tabpanel" role="tabpanel" data-tab="flights" data-active="false"></div>
+    <div class="search-tabpanel" role="tabpanel" data-tab="hotels" data-active="false"></div>
+  </div>
+</section>
+{% endblock %}
+
+{% block body_scripts %}<script src="/static/js/pages/search.js"></script>{% endblock %}
