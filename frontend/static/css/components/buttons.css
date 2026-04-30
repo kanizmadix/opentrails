@@ -1,0 +1,99 @@
+/* Pill buttons — Apple style */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+  padding: 12px 22px;
+  border-radius: var(--radius-pill);
+  font-size: var(--fs-small);
+  font-weight: var(--fw-medium);
+  letter-spacing: var(--tracking-base);
+  cursor: pointer;
+  border: 1px solid transparent;
+  transition: background-color var(--dur-fast) var(--ease-out),
+              color var(--dur-fast) var(--ease-out),
+              transform var(--dur-fast) var(--ease-out),
+              box-shadow var(--dur-fast) var(--ease-out),
+              border-color var(--dur-fast) var(--ease-out);
+  user-select: none;
+  white-space: nowrap;
+  text-decoration: none;
+}
+
+.btn:active { transform: scale(0.98); }
+.btn:disabled, .btn[aria-disabled="true"] { opacity: 0.5; pointer-events: none; }
+
+/* Primary (filled accent) */
+.btn-primary {
+  background: var(--color-accent);
+  color: #fff;
+}
+.btn-primary:hover { background: var(--color-accent-hover); color: #fff; text-decoration: none; }
+.btn-primary:active { background: var(--color-accent-press); }
+
+/* Secondary (subtle filled) */
+.btn-secondary {
+  background: var(--color-surface);
+  color: var(--color-ink);
+}
+.btn-secondary:hover { background: var(--color-surface-2); text-decoration: none; }
+
+/* Ghost (transparent outline) */
+.btn-ghost {
+  background: transparent;
+  color: var(--color-ink);
+  border-color: var(--color-divider-strong);
+}
+.btn-ghost:hover { background: var(--color-surface); text-decoration: none; }
+
+/* Inverted (dark on light, light on dark) */
+.btn-inverted {
+  background: var(--color-ink);
+  color: var(--color-bg);
+}
+.btn-inverted:hover { opacity: 0.9; color: var(--color-bg); text-decoration: none; }
+
+/* Sizes */
+.btn-sm { padding: 8px 16px; font-size: var(--fs-caption); }
+.btn-lg { padding: 16px 28px; font-size: var(--fs-body); }
+.btn-xl { padding: 18px 32px; font-size: var(--fs-body-lg); }
+
+/* Icon-only / round */
+.btn-icon {
+  width: 40px; height: 40px;
+  padding: 0; border-radius: 50%;
+  background: var(--color-surface);
+  color: var(--color-ink);
+}
+.btn-icon:hover { background: var(--color-surface-2); }
+
+/* Link-style chevron */
+.btn-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  color: var(--color-accent);
+  font-size: var(--fs-small);
+  font-weight: var(--fw-medium);
+  background: none;
+  border: 0;
+  padding: 0;
+  cursor: pointer;
+}
+.btn-link::after {
+  content: "›";
+  font-size: 1.3em;
+  transition: transform var(--dur-fast) var(--ease-out);
+}
+.btn-link:hover { text-decoration: underline; text-underline-offset: 3px; }
+.btn-link:hover::after { transform: translateX(3px); }
+
+/* Block */
+.btn-block { width: 100%; }
+
+/* Loading state */
+.btn[data-loading="true"] {
+  pointer-events: none;
+  opacity: 0.7;
+}
