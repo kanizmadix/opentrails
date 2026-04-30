@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+{% block title %}Wishlist · OpenTrails{% endblock %}
+{% block body_class %}page-wishlist{% endblock %}
+{% block head_css %}<link rel="stylesheet" href="/static/css/pages/trip.css">{% endblock %}
+
+{% block content %}
+<section class="section-tight">
+  <div class="container">
+    <div style="margin-bottom: 32px;">
+      <div class="t-eyebrow">Wishlist</div>
+      <h1 class="t-headline">Places you love.</h1>
+      <p class="muted" style="margin-top: 8px;">Heart attractions, hotels and destinations as you go — they all show up here.</p>
+    </div>
+
+    <div id="wishlist-grid" class="wishlist-grid"></div>
+  </div>
+</section>
+{% endblock %}
+
+{% block body_scripts %}<script src="/static/js/pages/trip.js"></script>{% endblock %}
