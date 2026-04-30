@@ -12,6 +12,7 @@ build/
 .pytest_cache/
 .ruff_cache/
 .cache/
+data/*.db
 data/*.db-journal
 data/*.db-wal
 data/*.db-shm
