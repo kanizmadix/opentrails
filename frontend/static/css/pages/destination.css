@@ -1,0 +1,156 @@
+/* Destination detail page */
+.dest-hero {
+  position: relative;
+  min-height: 70vh;
+  border-radius: 0 0 var(--radius-2xl) var(--radius-2xl);
+  overflow: hidden;
+  display: flex;
+  align-items: flex-end;
+  background-size: cover;
+  background-position: center;
+  isolation: isolate;
+  margin-bottom: var(--section-y);
+}
+.dest-hero::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, rgba(0,0,0,0) 30%, rgba(0,0,0,0.7) 100%);
+  z-index: 0;
+}
+.dest-hero-body {
+  position: relative;
+  z-index: 1;
+  padding: var(--space-12);
+  color: white;
+  max-width: 760px;
+}
+.dest-hero-body h1 {
+  font-size: var(--fs-headline);
+  font-weight: var(--fw-semibold);
+  color: white;
+  letter-spacing: var(--tracking-tight);
+  margin-bottom: var(--space-3);
+}
+.dest-hero-body p { color: rgba(255,255,255,0.9); font-size: var(--fs-body-lg); }
+.dest-hero-body .meta-row {
+  display: flex;
+  gap: var(--space-3);
+  margin-top: var(--space-4);
+  flex-wrap: wrap;
+}
+.dest-hero-body .meta-row .badge { background: rgba(255,255,255,0.18); color: white; backdrop-filter: blur(12px); }
+
+/* Intel grid (visa, currency, language, plug, etc.) */
+.intel-grid {
+  display: grid;
+  gap: var(--space-4);
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+}
+.intel-cell {
+  padding: var(--space-6);
+  background: var(--color-surface);
+  border-radius: var(--radius-lg);
+  display: flex; flex-direction: column; gap: var(--space-2);
+}
+.intel-cell .label {
+  font-size: var(--fs-caption);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--color-ink-muted);
+  font-weight: var(--fw-semibold);
+}
+.intel-cell .value {
+  font-size: var(--fs-title-3);
+  font-weight: var(--fw-semibold);
+  letter-spacing: var(--tracking-tight);
+}
+.intel-cell .sub { font-size: var(--fs-caption); color: var(--color-ink-muted); }
+
+/* Weather widget */
+.weather-card {
+  padding: var(--space-6);
+  background: linear-gradient(135deg, #d1e7ff, #b9d6ff);
+  border-radius: var(--radius-xl);
+  color: #1d1d1f;
+}
+:root[data-theme="dark"] .weather-card { background: linear-gradient(135deg, #103660, #1a4d80); color: #f5f5f7; }
+.weather-current {
+  display: flex; align-items: center; gap: var(--space-6);
+  margin-bottom: var(--space-6);
+}
+.weather-current .temp { font-size: 4rem; font-weight: var(--fw-light); letter-spacing: var(--tracking-tight); line-height: 1; }
+.weather-current .desc { font-size: var(--fs-body); }
+.weather-week {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: var(--space-2);
+}
+.weather-day {
+  text-align: center;
+  padding: var(--space-3) 4px;
+  border-radius: var(--radius-md);
+  background: rgba(255,255,255,0.4);
+  font-size: var(--fs-caption);
+}
+:root[data-theme="dark"] .weather-day { background: rgba(255,255,255,0.06); }
+.weather-day .dow { font-weight: var(--fw-semibold); margin-bottom: 4px; }
+.weather-day .hi { font-weight: var(--fw-medium); }
+.weather-day .lo { color: var(--color-ink-muted); }
+
+/* Currency widget */
+.currency-card {
+  padding: var(--space-6);
+  background: var(--color-surface);
+  border-radius: var(--radius-xl);
+  display: flex; flex-direction: column; gap: var(--space-4);
+}
+.currency-row {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  gap: var(--space-3);
+  align-items: center;
+}
+.currency-row input {
+  background: var(--color-bg-elevated);
+  border-radius: var(--radius-md);
+  padding: 12px 14px;
+  border: 1px solid var(--color-divider);
+  font-size: var(--fs-body);
+  font-weight: var(--fw-medium);
+}
+.currency-swap {
+  width: 36px; height: 36px;
+  border-radius: 50%;
+  background: var(--color-bg-elevated);
+  display: grid; place-items: center;
+}
+
+/* Two-column intel + map */
+.dest-cols {
+  display: grid;
+  gap: var(--space-8);
+  grid-template-columns: 1fr;
+}
+@media (min-width: 1000px) { .dest-cols { grid-template-columns: 1.2fr 1fr; } }
+
+/* Packing list card */
+.packing-card {
+  background: var(--color-surface);
+  border-radius: var(--radius-xl);
+  padding: var(--space-6);
+}
+.packing-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: var(--space-2);
+}
+.packing-item {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-2) var(--space-3);
+  background: var(--color-bg-elevated);
+  border-radius: var(--radius-sm);
+  font-size: var(--fs-small);
+}
